@@ -1,0 +1,22 @@
+{
+    "name": "cawaphp/html",
+    "description": "Сáша html",
+    "keywords": ["cawa", "html", "form"],
+    "minimum-stability": "dev",
+    "prefer-stable" : true,
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "tchiotludo"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Cawa\\Html\\": "src"
+        }
+    },
+    "require": {
+        "php": "~7.0",
+        "cawaphp/cawa" : "dev-master"
+    }
+}
