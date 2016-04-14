@@ -239,9 +239,14 @@ abstract class AbstractField extends HtmlContainer
      *
      * @return $this
      */
-    public function setPlaceholder(string $name) : self
+    public function setPlaceholder(string $name = null) : self
     {
-        $this->field->addAttribute('placeholder', $name);
+        if (is_null($name)) {
+            $this->field->removeAttribute('placeholder');
+        } else {
+            $this->field->addAttribute('placeholder', $name);
+        }
+
 
         return $this;
     }
