@@ -14,9 +14,9 @@ declare (strict_types=1);
 namespace Cawa\Html\Tables;
 
 use Cawa\Bootstrap\Tables\Column;
-use Cawa\Core\Controller\Renderer\HtmlContainer;
-use Cawa\Core\Controller\Renderer\HtmlElement;
-use Cawa\Core\Controller\ViewController;
+use Cawa\App\Controller\Renderer\HtmlContainer;
+use Cawa\App\Controller\Renderer\HtmlElement;
+use Cawa\App\Controller\ViewController;
 
 class Table extends HtmlContainer
 {
@@ -123,6 +123,23 @@ class Table extends HtmlContainer
     }
 
     /**
+     * @var callable[]
+     */
+    private $renderCallback;
+
+    /**
+     * @param callable $renderCallback
+     *
+     * @return $this
+     */
+    public function addRenderCallback(callable $renderCallback) : self
+    {
+        $this->renderCallback[] = $renderCallback;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function render()
@@ -145,6 +162,10 @@ class Table extends HtmlContainer
                     $td->setContent((string)$content);
                     $tr->add($td);
                 }
+            }
+
+            foreach($this->renderCallback as $callback) {
+                $tr = call_user_func($callback, $tr, $row);
             }
 
             $this->tbody->add($tr);

@@ -9,3 +9,5 @@ vendor/
 ### Tools
 phpunit.phar
 php-cs-fixer.phar
+phpcs.phar
+phpcbf.phar

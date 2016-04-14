@@ -13,15 +13,17 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms;
 
-use Cawa\Core\App;
-use Cawa\Core\Controller\Renderer\HtmlContainer;
-use Cawa\Core\Controller\ViewController;
+use Cawa\App\App;
+use Cawa\App\Controller\Renderer\HtmlContainer;
+use Cawa\App\Controller\ViewController;
 use Cawa\Html\Forms\Fields\AbstractField;
 use Cawa\Html\Forms\Fields\Hidden;
 use Cawa\Http\TraitParameter;
+use Cawa\Session\SessionFactory;
 
 class Form extends HtmlContainer
 {
+    use SessionFactory;
     use TraitParameter;
 
     /**
@@ -249,7 +251,7 @@ class Form extends HtmlContainer
 
         if ($this->csrf) {
             $csrfName = "CSRF_" . $this->getName();
-            $csrfToken = App::session()->get($csrfName);
+            $csrfToken = self::session()->get($csrfName);
             if (App::request()->getArg("_csrf", "string") != $csrfToken) {
                 return false;
             }
@@ -285,7 +287,7 @@ class Form extends HtmlContainer
 
             $csrfName = "CSRF_" . $this->getName();
             $csrfToken = md5((string) mt_rand());
-            App::session()->set($csrfName, $csrfToken);
+            self::session()->set($csrfName, $csrfToken);
             $this->addFirst(new Hidden("_csrf", $csrfToken));
         }
 
