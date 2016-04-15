@@ -14,8 +14,8 @@ declare (strict_types=1);
 namespace Cawa\Html\Forms;
 
 use Cawa\App\App;
-use Cawa\App\Controller\Renderer\HtmlContainer;
-use Cawa\App\Controller\ViewController;
+use Cawa\Renderer\HtmlContainer;
+use Cawa\Controller\ViewController;
 use Cawa\Html\Forms\Fields\AbstractField;
 use Cawa\Html\Forms\Fields\Hidden;
 use Cawa\Http\TraitParameter;

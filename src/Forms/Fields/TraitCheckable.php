@@ -13,8 +13,8 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms\Fields;
 
-use Cawa\App\Controller\Renderer\EmptyElement;
-use Cawa\App\Controller\Renderer\HtmlContainer;
+use Cawa\Renderer\EmptyElement;
+use Cawa\Renderer\HtmlContainer;
 
 /**
  * @mixin AbstractField

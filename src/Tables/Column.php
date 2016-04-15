@@ -13,7 +13,7 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Tables;
 
-use Cawa\App\Controller\Renderer\HtmlContainer;
+use Cawa\Renderer\HtmlContainer;
 
 class Column extends HtmlContainer
 {
