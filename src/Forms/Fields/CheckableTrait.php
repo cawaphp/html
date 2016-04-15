@@ -19,7 +19,7 @@ use Cawa\Renderer\HtmlContainer;
 /**
  * @mixin AbstractField
  */
-trait TraitCheckable
+trait CheckableTrait
 {
     /**
      * @var string

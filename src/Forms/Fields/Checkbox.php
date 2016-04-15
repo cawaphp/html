@@ -15,7 +15,7 @@ namespace Cawa\Html\Forms\Fields;
 
 class Checkbox extends AbstractField
 {
-    use TraitCheckable;
+    use CheckableTrait;
 
     /**
      * @param string $name

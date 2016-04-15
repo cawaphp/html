@@ -15,7 +15,7 @@ namespace Cawa\Html\Forms\Fields;
 
 class Radio extends AbstractField
 {
-    use TraitCheckable;
+    use CheckableTrait;
 
     /**
      * @param string $name

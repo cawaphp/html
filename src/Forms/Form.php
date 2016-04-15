@@ -18,13 +18,13 @@ use Cawa\Renderer\HtmlContainer;
 use Cawa\Controller\ViewController;
 use Cawa\Html\Forms\Fields\AbstractField;
 use Cawa\Html\Forms\Fields\Hidden;
-use Cawa\Http\TraitParameter;
+use Cawa\Http\ParameterTrait;
 use Cawa\Session\SessionFactory;
 
 class Form extends HtmlContainer
 {
     use SessionFactory;
-    use TraitParameter;
+    use ParameterTrait;
 
     /**
      *
