@@ -13,7 +13,7 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms;
 
-use Cawa\App\App;
+use Cawa\App\HttpApp;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Controller\ViewController;
 use Cawa\Html\Forms\Fields\AbstractField;
@@ -202,7 +202,7 @@ class Form extends HtmlContainer
             return false;
         }
 
-        $userInput = App::request()->getArg($element->getName());
+        $userInput = HttpApp::request()->getArg($element->getName());
 
         if (is_null($userInput)) {
             return false;
@@ -245,14 +245,14 @@ class Form extends HtmlContainer
      */
     public function isSubmit() : bool
     {
-        if (App::request()->getMethod() != $this->getMethod()) {
+        if (HttpApp::request()->getMethod() != $this->getMethod()) {
             return false;
         }
 
         if ($this->csrf) {
             $csrfName = 'CSRF_' . $this->getName();
             $csrfToken = self::session()->get($csrfName);
-            if (App::request()->getArg('_csrf', 'string') != $csrfToken) {
+            if (HttpApp::request()->getArg('_csrf', 'string') != $csrfToken) {
                 return false;
             }
         }
