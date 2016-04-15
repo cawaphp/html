@@ -156,7 +156,7 @@ class Form extends HtmlContainer
         }
 
         $return = $this->values[$name]['value'] ?? null;
-        if ($return == "") {
+        if ($return == '') {
             $return = null;
         }
 
@@ -223,7 +223,7 @@ class Form extends HtmlContainer
             } else {
                 $value['value'] = $typeReturn;
             }
-        } else  {
+        } else {
             $value['value'] = $userInput;
         }
 
@@ -250,9 +250,9 @@ class Form extends HtmlContainer
         }
 
         if ($this->csrf) {
-            $csrfName = "CSRF_" . $this->getName();
+            $csrfName = 'CSRF_' . $this->getName();
             $csrfToken = self::session()->get($csrfName);
-            if (App::request()->getArg("_csrf", "string") != $csrfToken) {
+            if (App::request()->getArg('_csrf', 'string') != $csrfToken) {
                 return false;
             }
         }
@@ -285,10 +285,10 @@ class Form extends HtmlContainer
                 throw new \LogicException("Can't set CSRF token with form name");
             }
 
-            $csrfName = "CSRF_" . $this->getName();
+            $csrfName = 'CSRF_' . $this->getName();
             $csrfToken = md5((string) mt_rand());
             self::session()->set($csrfName, $csrfToken);
-            $this->addFirst(new Hidden("_csrf", $csrfToken));
+            $this->addFirst(new Hidden('_csrf', $csrfToken));
         }
 
         $return = parent::render();

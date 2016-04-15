@@ -29,7 +29,6 @@ class Hidden extends AbstractField
         }
     }
 
-
     /**
      * {@inheritdoc}
      */

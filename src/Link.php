@@ -14,7 +14,7 @@ declare (strict_types=1);
 namespace Cawa\Html;
 
 use Cawa\App\Controller\Renderer\HtmlContainer;
-use Cawa\Uri\Uri;
+use Cawa\Net\Uri;
 
 class Link extends HtmlContainer
 {
@@ -73,6 +73,4 @@ class Link extends HtmlContainer
     {
         return $this->setHref($uri->get());
     }
-
-
 }

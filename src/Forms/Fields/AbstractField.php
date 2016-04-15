@@ -247,7 +247,6 @@ abstract class AbstractField extends HtmlContainer
             $this->field->addAttribute('placeholder', $name);
         }
 
-
         return $this;
     }
 

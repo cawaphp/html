@@ -178,7 +178,7 @@ class Column extends HtmlContainer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function render()
     {

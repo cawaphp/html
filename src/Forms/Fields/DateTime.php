@@ -28,13 +28,13 @@ class DateTime extends AbstractField
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setValue($value) : parent
     {
         if ($value instanceof Date) {
             $value = $value->formatTz('Y-m-d\TH:i:s');
-        } else if (is_string($value) && $value) {
+        } elseif (is_string($value) && $value) {
             $date = new Date($value);
             $value = $date->formatTz('Y-m-d');
         }

@@ -13,10 +13,10 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Tables;
 
-use Cawa\Bootstrap\Tables\Column;
 use Cawa\App\Controller\Renderer\HtmlContainer;
 use Cawa\App\Controller\Renderer\HtmlElement;
 use Cawa\App\Controller\ViewController;
+use Cawa\Bootstrap\Tables\Column;
 
 class Table extends HtmlContainer
 {
@@ -26,8 +26,8 @@ class Table extends HtmlContainer
     public function __construct()
     {
         parent::__construct('<table>');
-        $this->thead = HtmlContainer::create("<thead>");
-        $this->tbody = HtmlContainer::create("<tbody>");
+        $this->thead = HtmlContainer::create('<thead>');
+        $this->tbody = HtmlContainer::create('<tbody>');
 
         $this->elements[] = $this->thead;
         $this->elements[] = $this->tbody;
@@ -44,7 +44,7 @@ class Table extends HtmlContainer
     private $tbody;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function add(ViewController $element)
     {
@@ -58,7 +58,7 @@ class Table extends HtmlContainer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addFirst(ViewController $element)
     {
@@ -111,7 +111,7 @@ class Table extends HtmlContainer
      */
     private function getPrimaryValues(array $data) : array
     {
-        $return = array();
+        $return = [];
         /** @var Column $column */
         foreach ($this->thead->elements as $column) {
             if ($column->isPrimary()) {
@@ -145,26 +145,25 @@ class Table extends HtmlContainer
     public function render()
     {
         foreach ($this->data as $row) {
-            $tr = HtmlContainer::create("<tr>");
+            $tr = HtmlContainer::create('<tr>');
 
             /** @var Column $column */
             foreach ($this->thead->elements as $column) {
-
                 if ($column->isVisible()) {
-                    $td = HtmlElement::create("<td>");
+                    $td = HtmlElement::create('<td>');
                     $td->addClass($column->getClasses());
-                    $content = $row[$column->getId()] ?? "";
+                    $content = $row[$column->getId()] ?? '';
 
                     if ($column->getRenderer()) {
                         $content = call_user_func($column->getRenderer(), $content, $this->getPrimaryValues($row));
                     }
 
-                    $td->setContent((string)$content);
+                    $td->setContent((string) $content);
                     $tr->add($td);
                 }
             }
 
-            foreach($this->renderCallback as $callback) {
+            foreach ($this->renderCallback as $callback) {
                 $tr = call_user_func($callback, $tr, $row);
             }
 
