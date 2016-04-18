@@ -13,9 +13,9 @@ declare (strict_types = 1);
 
 namespace Cawa\Html\Forms\Fields;
 
+use Cawa\Html\Forms\Label;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Renderer\HtmlElement;
-use Cawa\Html\Forms\Label;
 
 abstract class AbstractField extends HtmlContainer
 {

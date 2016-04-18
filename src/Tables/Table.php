@@ -13,10 +13,10 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Tables;
 
+use Cawa\Bootstrap\Tables\Column;
+use Cawa\Controller\ViewController;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Renderer\HtmlElement;
-use Cawa\Controller\ViewController;
-use Cawa\Bootstrap\Tables\Column;
 
 class Table extends HtmlContainer
 {
