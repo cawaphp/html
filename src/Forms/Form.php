@@ -13,6 +13,7 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms;
 
+use Cawa\App\HttpFactory;
 use Cawa\App\HttpApp;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Controller\ViewController;
@@ -23,6 +24,7 @@ use Cawa\Session\SessionFactory;
 
 class Form extends HtmlContainer
 {
+    use HttpFactory;
     use SessionFactory;
     use ParameterTrait;
 
@@ -202,7 +204,7 @@ class Form extends HtmlContainer
             return false;
         }
 
-        $userInput = HttpApp::request()->getArg($element->getName());
+        $userInput = $this->request()->getArg($element->getName());
 
         if (is_null($userInput)) {
             return false;
@@ -245,14 +247,14 @@ class Form extends HtmlContainer
      */
     public function isSubmit() : bool
     {
-        if (HttpApp::request()->getMethod() != $this->getMethod()) {
+        if ($this->request()->getMethod() != $this->getMethod()) {
             return false;
         }
 
         if ($this->csrf) {
             $csrfName = 'CSRF_' . $this->getName();
             $csrfToken = self::session()->get($csrfName);
-            if (HttpApp::request()->getArg('_csrf', 'string') != $csrfToken) {
+            if ($this->request()->getArg('_csrf', 'string') != $csrfToken) {
                 return false;
             }
         }
