@@ -279,17 +279,67 @@ class Form extends HtmlContainer
         return true;
     }
 
+    /**
+     * add Csrf input hidden
+     */
+    private function addCsrf()
+    {
+        if (!$this->getName()) {
+            throw new \LogicException("Can't set CSRF token with form name");
+        }
+
+        $csrfName = 'CSRF_' . $this->getName();
+        $csrfToken = md5((string) mt_rand());
+        self::session()->set($csrfName, $csrfToken);
+        $this->addFirst(new Hidden('_csrf', $csrfToken));
+    }
+
+    /**
+     * @return array
+     */
+    public function export() : array
+    {
+        if ($this->csrf) {
+            $this->addCsrf();
+        }
+
+        $return = [
+            'form' => $this->renderOuter(),
+            'elements' => [],
+        ];
+
+        /** @var AbstractField $element */
+        foreach ($this->elements as $element) {
+            if (!$element->getName()) {
+                throw new \InvalidArgumentException(sprintf(
+                    "Can't export fields '%s' without name",
+                    get_class($element)
+                ));
+            }
+
+            $item = [
+                'name' => $element->getName(),
+                'outer' => $element->renderOuter(),
+                'value' => $element->getValue(),
+            ];
+
+            $item['field'] = $element->getField()->render();
+            if ($element->getLabel()) {
+                $item['label'] = $element->getLabel()->render();
+                $item['labelOuter'] = $element->getLabel()->renderOuter();
+                $item['labelContent'] = $element->getLabel()->getContent();
+            }
+
+            $return['elements'][$element->getName()] = $item;
+        }
+
+        return $return;
+    }
+
     public function render()
     {
         if ($this->csrf) {
-            if (!$this->getName()) {
-                throw new \LogicException("Can't set CSRF token with form name");
-            }
-
-            $csrfName = 'CSRF_' . $this->getName();
-            $csrfToken = md5((string) mt_rand());
-            self::session()->set($csrfName, $csrfToken);
-            $this->addFirst(new Hidden('_csrf', $csrfToken));
+            $this->addCsrf();
         }
 
         $return = parent::render();

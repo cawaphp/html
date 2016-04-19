@@ -87,11 +87,6 @@ trait CheckableTrait
         $this->getLabel()->setContent($this->getField()->render() . ' ' . $labelContent);
         $this->setField(new EmptyElement());
 
-        $return = HtmlContainer::render();
-
-        $this->setField($field);
-        $this->getLabel()->setContent($labelContent);
-
-        return $return;
+        return HtmlContainer::render();
     }
 }
