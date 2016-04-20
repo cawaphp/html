@@ -146,12 +146,21 @@ class Form extends HtmlContainer
     protected $values = [];
 
     /**
+     * @var array
+     */
+    protected $valuesAsArray = [];
+
+    /**
      * @param string $name
      *
      * @return mixed
      */
     public function getValue(string $name)
     {
+        if (isset($this->valuesAsArray[$name])) {
+            return $this->valuesAsArray[$name];
+        }
+
         if (!isset($this->values[$name])) {
             return null;
         }
@@ -238,6 +247,28 @@ class Form extends HtmlContainer
 
         $this->values[$name] = $value;
 
+        // store array in friendly property
+        if (stripos($name, '[') !== false && isset($value['value']) && $value['value'] != '') {
+            $names = explode('[', str_replace(']', '', $name));
+
+            $valueAsArray = [];
+            $ref = &$valueAsArray;
+            $leave = false;
+
+            while ($leave == false) {
+                $key = array_shift($names);
+
+                if (is_null($key)) {
+                    $leave = true;
+                    $ref = $value['value'];
+                } else {
+                    $ref = &$ref[$key];
+                }
+            }
+
+            $this->valuesAsArray = array_replace_recursive($this->valuesAsArray, $valueAsArray);
+        }
+
         return $value['valid'];
     }
 
@@ -271,7 +302,7 @@ class Form extends HtmlContainer
         }
 
         foreach ($this->values as $name => $value) {
-            if ($value['valid'] === false) {
+            if (isset($value['valid']) && $value['valid'] === false) {
                 return false;
             }
         }
