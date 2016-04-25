@@ -91,16 +91,36 @@ abstract class AbstractField extends HtmlContainer
     }
 
     /**
-     * @var HtmlContainer
+     * @var HtmlElement
      */
     private $field;
 
     /**
-     * @return HtmlContainer
+     * @return HtmlElement
      */
     public function getField() : HtmlContainer
     {
         return $this->field;
+    }
+
+    /**
+     * @param HtmlElement|null $field
+     */
+    protected function setField(HtmlElement $field = null)
+    {
+        $index = null;
+        foreach ($this->elements as $i => $element) {
+            if ($element === $this->field) {
+                $index = $i;
+            }
+        }
+
+        if (is_null($index)) {
+            throw new \LogicException("Can't find field");
+        }
+
+        $this->elements[$index] = $field;
+        $this->field = $field;
     }
 
     /**
@@ -126,26 +146,6 @@ abstract class AbstractField extends HtmlContainer
         $this->primitiveType = $primitiveType;
 
         return $this;
-    }
-
-    /**
-     * @param HtmlContainer|null $field
-     */
-    protected function setField(HtmlElement $field = null)
-    {
-        $index = null;
-        foreach ($this->elements as $i => $element) {
-            if ($element === $this->field) {
-                $index = $i;
-            }
-        }
-
-        if (is_null($index)) {
-            throw new \LogicException("Can't find field");
-        }
-
-        $this->elements[$index] = $field;
-        $this->field = $field;
     }
 
     /**

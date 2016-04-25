@@ -16,6 +16,7 @@ namespace Cawa\Html\Forms;
 use Cawa\App\HttpFactory;
 use Cawa\Controller\ViewController;
 use Cawa\Html\Forms\Fields\AbstractField;
+use Cawa\Html\Forms\Fields\File;
 use Cawa\Html\Forms\Fields\Hidden;
 use Cawa\Http\ParameterTrait;
 use Cawa\Renderer\HtmlContainer;
@@ -180,6 +181,10 @@ class Form extends HtmlContainer
      */
     public function add(ViewController $element)
     {
+        if (method_exists($element, "onAdd")) {
+            $element->onAdd($this);
+        }
+
         $this->populateValue($element);
 
         return parent::add($element);
@@ -192,6 +197,10 @@ class Form extends HtmlContainer
      */
     public function addFirst(ViewController $element)
     {
+        if (method_exists($element, "onAdd")) {
+            $element->onAdd($this);
+        }
+
         $this->populateValue($element);
 
         return parent::addFirst($element);
@@ -212,7 +221,12 @@ class Form extends HtmlContainer
             return false;
         }
 
-        $userInput = $this->request()->getArg($element->getName());
+        if ($element instanceof File) {
+            $userInput = $this->request()->getUploadedFile($element->getName());
+        } else {
+            $userInput = $this->request()->getArg($element->getName());
+        }
+
 
         if (is_null($userInput)) {
             return false;
