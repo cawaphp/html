@@ -45,7 +45,7 @@ class File extends AbstractField
      *
      * @return File
      */
-    public function setValue($value) : parent 
+    public function setValue($value) : parent
     {
         if (!$value instanceof \Cawa\Http\File) {
             throw new \LogicException("File '%s' value must be an instance of \\Cawa\\Http\\File", $this->getName());
@@ -59,7 +59,8 @@ class File extends AbstractField
     /**
      * @param Form $form
      */
-    public function onAdd(Form $form) {
+    public function onAdd(Form $form)
+    {
         $form->setMultipart();
     }
 }

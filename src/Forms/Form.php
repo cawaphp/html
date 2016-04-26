@@ -181,7 +181,7 @@ class Form extends HtmlContainer
      */
     public function add(ViewController $element)
     {
-        if (method_exists($element, "onAdd")) {
+        if (method_exists($element, 'onAdd')) {
             $element->onAdd($this);
         }
 
@@ -197,7 +197,7 @@ class Form extends HtmlContainer
      */
     public function addFirst(ViewController $element)
     {
-        if (method_exists($element, "onAdd")) {
+        if (method_exists($element, 'onAdd')) {
             $element->onAdd($this);
         }
 
@@ -226,7 +226,6 @@ class Form extends HtmlContainer
         } else {
             $userInput = $this->request()->getArg($element->getName());
         }
-
 
         if (is_null($userInput)) {
             return false;
