@@ -149,6 +149,14 @@ abstract class AbstractField extends HtmlContainer
     }
 
     /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->field->getAttribute('id');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setId(string $value) : parent
@@ -157,7 +165,9 @@ abstract class AbstractField extends HtmlContainer
             $this->label->setFor($value);
         }
 
-        return parent::setId($value);
+        $this->field->setId($value);
+
+        return $this;
     }
 
     /**
