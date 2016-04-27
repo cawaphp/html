@@ -13,8 +13,6 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms\Fields;
 
-use Cawa\Date\Date;
-
 class DateTime extends AbstractField
 {
     /**
@@ -32,11 +30,11 @@ class DateTime extends AbstractField
      */
     public function setValue($value) : parent
     {
-        if ($value instanceof Date) {
+        if ($value instanceof \Cawa\Date\DateTime) {
             $value = $value->formatTz('Y-m-d\TH:i:s');
         } elseif (is_string($value) && $value) {
-            $date = new Date($value);
-            $value = $date->formatTz('Y-m-d');
+            $date = new \Cawa\Date\DateTime($value);
+            $value = $date->formatTz('Y-m-d\TH:i:s');
         }
 
         return parent::setValue($value);
