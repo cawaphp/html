@@ -227,10 +227,6 @@ class Form extends HtmlContainer
             $userInput = $this->request()->getArg($element->getName());
         }
 
-        if (is_null($userInput)) {
-            return false;
-        }
-
         $element->setValue($userInput);
 
         $value = [
@@ -238,6 +234,10 @@ class Form extends HtmlContainer
             'valid' => true,
             'value' => null,
         ];
+
+        if ($element->isRequired() && is_null($userInput)) {
+            $value['valid'] = false;
+        }
 
         if ($element->getPrimitiveType()) {
             $typeReturn = $this->validateType($userInput, $element->getPrimitiveType());
@@ -250,7 +250,7 @@ class Form extends HtmlContainer
             $value['value'] = $userInput;
         }
 
-        if (method_exists($element, 'isValid')) {
+        if (method_exists($element, 'isValid') && $value['valid'] == true) {
             $value['valid'] = $element->isValid();
         }
 
