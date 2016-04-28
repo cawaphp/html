@@ -17,6 +17,7 @@ use Cawa\App\HttpFactory;
 use Cawa\Controller\ViewController;
 use Cawa\Html\Forms\Fields\AbstractField;
 use Cawa\Html\Forms\Fields\File;
+use Cawa\Html\Forms\Group;
 use Cawa\Html\Forms\Fields\Hidden;
 use Cawa\Http\ParameterTrait;
 use Cawa\Renderer\HtmlContainer;
@@ -175,114 +176,128 @@ class Form extends HtmlContainer
     }
 
     /**
-     * @param ViewController $element
-     *
-     * @return $this
+     * @inheritdoc
      */
-    public function add(ViewController $element)
+    public function add(ViewController ...$elements)
     {
-        if (method_exists($element, 'onAdd')) {
-            $element->onAdd($this);
+        foreach ($elements as $element) {
+            if (method_exists($element, 'onAdd')) {
+                $element->onAdd($this);
+            }
+
+            $this->populateValue($element);
         }
 
-        $this->populateValue($element);
-
-        return parent::add($element);
+        return parent::add(...$elements);
     }
 
     /**
-     * @param ViewController $element
-     *
-     * @return $this
+     * @inheritdoc
      */
-    public function addFirst(ViewController $element)
+    public function addFirst(ViewController ...$elements)
     {
-        if (method_exists($element, 'onAdd')) {
-            $element->onAdd($this);
+        foreach ($elements as $element) {
+            if (method_exists($element, 'onAdd')) {
+                $element->onAdd($this);
+            }
+
+            $this->populateValue($element);
         }
 
-        $this->populateValue($element);
-
-        return parent::addFirst($element);
+        return parent::addFirst(...$elements);
     }
 
     /**
-     * @param AbstractField|ViewController $element
+     * @param AbstractField|Group $field
      *
      * @return bool
      */
-    protected function populateValue(AbstractField $element) : bool
+    protected function populateValue($field) : bool
     {
         if (!$this->isSubmit()) {
             return false;
         }
 
-        if (!$name = $element->getName()) {
-            return false;
-        }
-
-        if ($element instanceof File) {
-            $userInput = $this->request()->getUploadedFile($element->getName());
+        if ($field instanceof Group) {
+            $elements = $field->getFields();
+        } else if ($field instanceof AbstractField) {
+            $elements = [$field];
         } else {
-            $userInput = $this->request()->getArg($element->getName());
+            throw new \InvalidArgumentException(sprintf(
+                "Invalid type '%s'",
+                is_object($field) ? get_class($field) : gettype($field)
+            ));
         }
 
-        $element->setValue($userInput);
+        foreach ($elements as $element) {
 
-        $value = [
-            'userInput' => $userInput,
-            'valid' => true,
-            'value' => null,
-        ];
+            if (!$name = $element->getName()) {
+                return false;
+            }
 
-        if ($element->isRequired() && is_null($userInput)) {
-            $value['valid'] = false;
-        }
-
-        if ($element->getPrimitiveType()) {
-            $typeReturn = $this->validateType($userInput, $element->getPrimitiveType());
-            if (is_null($typeReturn)) {
-                $value['valid'] = false;
+            if ($element instanceof File) {
+                $userInput = $this->request()->getUploadedFile($element->getName());
             } else {
-                $value['value'] = $typeReturn;
+                $userInput = $this->request()->getArg($element->getName());
             }
-        } else {
-            $value['value'] = $userInput;
-        }
 
-        if (method_exists($element, 'isValid') && $value['valid'] == true) {
-            $value['valid'] = $element->isValid();
-        }
+            $element->setValue($userInput);
 
-        if (!$value['valid']) {
-            unset($value['value']);
-        }
+            $value = [
+                'userInput' => $userInput,
+                'valid' => true,
+                'value' => null,
+            ];
 
-        $this->values[$name] = $value;
+            if ($element->isRequired() && is_null($userInput)) {
+                $value['valid'] = false;
+            }
 
-        // store array in friendly property
-        if (stripos($name, '[') !== false && isset($value['value']) && $value['value'] != '') {
-            $names = explode('[', str_replace(']', '', $name));
-
-            $valueAsArray = [];
-            $ref = &$valueAsArray;
-            $leave = false;
-
-            while ($leave == false) {
-                $key = array_shift($names);
-
-                if (is_null($key)) {
-                    $leave = true;
-                    $ref = $value['value'];
+            if ($element->getPrimitiveType()) {
+                $typeReturn = $this->validateType($userInput, $element->getPrimitiveType());
+                if (is_null($typeReturn)) {
+                    $value['valid'] = false;
                 } else {
-                    $ref = &$ref[$key];
+                    $value['value'] = $typeReturn;
                 }
+            } else {
+                $value['value'] = $userInput;
             }
 
-            $this->valuesAsArray = array_replace_recursive($this->valuesAsArray, $valueAsArray);
+            if (method_exists($element, 'isValid') && $value['valid'] == true) {
+                $value['valid'] = $element->isValid();
+            }
+
+            if (!$value['valid']) {
+                unset($value['value']);
+            }
+
+            $this->values[$name] = $value;
+
+            // store array in friendly property
+            if (stripos($name, '[') !== false && isset($value['value']) && $value['value'] != '') {
+                $names = explode('[', str_replace(']', '', $name));
+
+                $valueAsArray = [];
+                $ref = &$valueAsArray;
+                $leave = false;
+
+                while ($leave == false) {
+                    $key = array_shift($names);
+
+                    if (is_null($key)) {
+                        $leave = true;
+                        $ref = $value['value'];
+                    } else {
+                        $ref = &$ref[$key];
+                    }
+                }
+
+                $this->valuesAsArray = array_replace_recursive($this->valuesAsArray, $valueAsArray);
+            }
         }
 
-        return $value['valid'];
+        return true;
     }
 
     /**

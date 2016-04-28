@@ -46,13 +46,15 @@ class Table extends HtmlContainer
     /**
      * {@inheritdoc}
      */
-    public function add(ViewController $element)
+    public function add(ViewController ...$elements)
     {
-        if (!$element instanceof Column) {
-            throw new \LogicException(sprintf("Invalid column type, got '%s'", get_class($element)));
-        }
+        foreach ($elements as $element) {
+            if (!$element instanceof Column) {
+                throw new \LogicException(sprintf("Invalid column type, got '%s'", get_class($element)));
+            }
 
-        $this->thead->add($element);
+            $this->thead->add($element);
+        }
 
         return $this;
     }
@@ -60,13 +62,15 @@ class Table extends HtmlContainer
     /**
      * {@inheritdoc}
      */
-    public function addFirst(ViewController $element)
+    public function addFirst(ViewController ...$elements)
     {
-        if (!$element instanceof Column) {
-            throw new \LogicException(sprintf("Invalid column type, got '%s'", get_class($element)));
-        }
+        foreach ($elements as $element) {
+            if (!$element instanceof Column) {
+                throw new \LogicException(sprintf("Invalid column type, got '%s'", get_class($element)));
+            }
 
-        $this->thead->addFirst($element);
+            $this->thead->addFirst($element);
+        }
 
         return $this;
     }

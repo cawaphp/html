@@ -96,7 +96,7 @@ abstract class AbstractField extends HtmlContainer
     private $field;
 
     /**
-     * @return HtmlElement
+     * @return HtmlContainer
      */
     public function getField() : HtmlContainer
     {
@@ -104,9 +104,11 @@ abstract class AbstractField extends HtmlContainer
     }
 
     /**
-     * @param HtmlElement|null $field
+     * @param HtmlContainer|null $field
+     *
+     * @return $this
      */
-    protected function setField(HtmlElement $field = null)
+    protected function setField(HtmlContainer $field = null) : self
     {
         $index = null;
         foreach ($this->elements as $i => $element) {
@@ -121,6 +123,8 @@ abstract class AbstractField extends HtmlContainer
 
         $this->elements[$index] = $field;
         $this->field = $field;
+
+        return $this;
     }
 
     /**
