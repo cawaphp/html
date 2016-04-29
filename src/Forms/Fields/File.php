@@ -47,8 +47,12 @@ class File extends AbstractField
      */
     public function setValue($value) : parent
     {
-        if (!$value instanceof \Cawa\Http\File) {
-            throw new \LogicException("File '%s' value must be an instance of \\Cawa\\Http\\File", $this->getName());
+        if (!$value instanceof \Cawa\Http\File && !is_null($value)) {
+            throw new \LogicException(sprintf(
+                "File '%s' value must be an instance of \\Cawa\\Http\\File, '%s' given",
+                $this->getName(),
+                is_object($value) ? get_class($value) : gettype($value)
+            ));
         }
 
         $this->value = $value;
