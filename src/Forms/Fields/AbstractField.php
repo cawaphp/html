@@ -60,12 +60,7 @@ abstract class AbstractField extends HtmlContainer
      */
     public function setLabel($label) : self
     {
-        $index = null;
-        foreach ($this->elements as $i => $element) {
-            if ($element === $this->label) {
-                $index = $i;
-            }
-        }
+        $index = $this->getIndex($this->label);
 
         if (!$label instanceof Label && !$label instanceof HtmlElement) {
             $label = new Label($label);
@@ -110,12 +105,7 @@ abstract class AbstractField extends HtmlContainer
      */
     protected function setField(HtmlContainer $field = null) : self
     {
-        $index = null;
-        foreach ($this->elements as $i => $element) {
-            if ($element === $this->field) {
-                $index = $i;
-            }
-        }
+        $index = $this->getIndex($this->field);
 
         if (is_null($index)) {
             throw new \LogicException("Can't find field");

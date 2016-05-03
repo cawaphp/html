@@ -15,6 +15,7 @@ namespace Cawa\Html\Forms;
 
 
 use Cawa\Controller\ViewController;
+use Cawa\Html\Forms\Fields\AbstractField;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Renderer\HtmlElement;
 
@@ -58,7 +59,7 @@ class Group extends HtmlContainer
     }
 
     /**
-     * @return array
+     * @return AbstractField[]
      */
     public function getFields() : array
     {
@@ -85,12 +86,7 @@ class Group extends HtmlContainer
      */
     public function setLabel($label) : self
     {
-        $index = null;
-        foreach ($this->elements as $i => $element) {
-            if ($element === $this->label) {
-                $index = $i;
-            }
-        }
+        $index = $this->getIndex($this->label);
 
         if (!$label instanceof Label && !$label instanceof HtmlElement) {
             $label = new Label($label);
@@ -110,7 +106,7 @@ class Group extends HtmlContainer
     /**
      * @return HtmlContainer
      */
-    public function getField() : HtmlContainer
+    public function getField()
     {
         return $this->container;
     }
@@ -122,18 +118,12 @@ class Group extends HtmlContainer
      */
     protected function setField(HtmlContainer $field = null) : self
     {
-        $index = null;
-        foreach ($this->elements as $i => $element) {
-            if ($element === $this->container) {
-                $index = $i;
-            }
-        }
-
+        $index = $this->getIndex($this->container);
         $this->container = $field;
 
 
         if (is_null($index)) {
-            array_unshift($this->elements, $label);
+            array_unshift($this->elements, $field);
         } else {
             $this->elements[$index] = $field;
         }
