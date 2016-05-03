@@ -229,16 +229,29 @@ class Form extends HtmlContainer
             ));
         }
 
+        $arrayName = [];
         foreach ($elements as $element) {
 
             if (!$name = $element->getName()) {
                 return false;
             }
 
+            // index name array
+            if (substr($name, -2) == "[]") {
+                $currentName = substr($name, 0, -2);
+                if (!isset($arrayName[$currentName])) {
+                    $arrayName[$currentName] = 0;
+                } else {
+                    $arrayName[$currentName]++;
+                }
+
+                $name = $currentName . "[" . $arrayName[$currentName] . "]";
+            }
+
             if ($element instanceof File) {
                 $userInput = $this->request()->getUploadedFile($element->getName());
             } else {
-                $userInput = $this->request()->getArg($element->getName());
+                $userInput = $this->request()->getArg($name);
             }
 
             $element->setValue($userInput);
