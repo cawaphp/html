@@ -51,7 +51,7 @@ class Select extends AbstractField
      */
     public function setValue($value) : parent
     {
-        if (!in_array($value, array_keys($this->options)) && $value != "") {
+        if (!in_array($value, array_keys($this->options)) && $value != '') {
             throw new \InvalidArgumentException(sprintf(
                 "Invalid option value '%s' for select '%s'",
                 $value,

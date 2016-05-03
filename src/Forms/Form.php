@@ -17,7 +17,6 @@ use Cawa\App\HttpFactory;
 use Cawa\Controller\ViewController;
 use Cawa\Html\Forms\Fields\AbstractField;
 use Cawa\Html\Forms\Fields\File;
-use Cawa\Html\Forms\Group;
 use Cawa\Html\Forms\Fields\Hidden;
 use Cawa\Http\ParameterTrait;
 use Cawa\Renderer\HtmlContainer;
@@ -176,7 +175,7 @@ class Form extends HtmlContainer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function add(ViewController ...$elements)
     {
@@ -192,7 +191,7 @@ class Form extends HtmlContainer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addFirst(ViewController ...$elements)
     {
@@ -220,7 +219,7 @@ class Form extends HtmlContainer
 
         if ($field instanceof Group) {
             $elements = $field->getFields();
-        } else if ($field instanceof AbstractField) {
+        } elseif ($field instanceof AbstractField) {
             $elements = [$field];
         } else {
             throw new \InvalidArgumentException(sprintf(
@@ -231,13 +230,12 @@ class Form extends HtmlContainer
 
         $arrayName = [];
         foreach ($elements as $element) {
-
             if (!$name = $element->getName()) {
                 return false;
             }
 
             // index name array
-            if (substr($name, -2) == "[]") {
+            if (substr($name, -2) == '[]') {
                 $currentName = substr($name, 0, -2);
                 if (!isset($arrayName[$currentName])) {
                     $arrayName[$currentName] = 0;
@@ -245,7 +243,7 @@ class Form extends HtmlContainer
                     $arrayName[$currentName]++;
                 }
 
-                $name = $currentName . "[" . $arrayName[$currentName] . "]";
+                $name = $currentName . '[' . $arrayName[$currentName] . ']';
             }
 
             if ($element instanceof File) {

@@ -13,19 +13,20 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms;
 
-
 use Cawa\Controller\ViewController;
-use Cawa\Html\Forms\Fields\AbstractField;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Renderer\HtmlElement;
 
 class Group extends HtmlContainer
 {
+    /**
+     * @param string|null $label
+     */
     public function __construct(string $label = null)
     {
-        parent::__construct("<div>");
+        parent::__construct('<div>');
 
-        $this->container = new HtmlContainer("<div>");
+        $this->container = new HtmlContainer('<div>');
         $this->elements[] = $this->container;
 
         if ($label) {
@@ -39,7 +40,7 @@ class Group extends HtmlContainer
     protected $container;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function add(ViewController ...$elements)
     {
@@ -49,7 +50,7 @@ class Group extends HtmlContainer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addFirst(ViewController ...$elements)
     {
@@ -59,13 +60,14 @@ class Group extends HtmlContainer
     }
 
     /**
-     * @return AbstractField[]
+     * Call by Form on populateValue
+     *
+     * @return array|Fields\AbstractField[]
      */
     public function getFields() : array
     {
         return $this->container->elements;
     }
-
     /**
      * @var Label|HtmlElement
      */
@@ -120,7 +122,6 @@ class Group extends HtmlContainer
     {
         $index = $this->getIndex($this->container);
         $this->container = $field;
-
 
         if (is_null($index)) {
             array_unshift($this->elements, $field);
