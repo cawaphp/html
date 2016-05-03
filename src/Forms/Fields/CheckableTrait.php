@@ -73,9 +73,9 @@ trait CheckableTrait
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function renderCheckable()
+    protected function renderCheckable()
     {
         $labelContent = $this->getLabel()->getContent();
         $field = $this->getField();
