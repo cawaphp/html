@@ -101,6 +101,18 @@ class Table extends HtmlContainer
      *
      * @return $this
      */
+    public function addData(array $data) : self
+    {
+        $this->data[] = $data;
+
+        return $this;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return $this
+     */
     public function setData(array $data) : self
     {
         $this->data = $data;
