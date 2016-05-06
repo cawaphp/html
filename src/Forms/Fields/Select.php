@@ -34,16 +34,54 @@ class Select extends AbstractField
 
         $isAssociative = array_keys($this->options) !== range(0, count($this->options) - 1);
 
-        $option = new HtmlElement('<option>');
-        $this->getField()->add($option);
+        $this->addOption("", "&nbsp;");
 
         foreach ($this->options as $key => $value) {
-            $option = new HtmlElement('<option>');
-            $option->setContent((string) $value);
-            $option->addAttribute('value', $isAssociative ? (string) $key : (string) $value);
-
-            $this->getField()->add($option);
+            $this->addOption((string) $key, $isAssociative ? (string) $key : (string) $value);
         }
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     *
+     * @return $this
+     */
+    protected function addOption(string $key, string $value) : self
+    {
+        $option = new HtmlElement('<option>');
+        $option->setContent((string) $value);
+        $option->addAttribute('value', $key);
+
+        $this->options[$key] = $value;
+
+        $this->getField()->add($option);
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMultiple() : bool
+    {
+        return $this->getField()->hasAttribute('multiple');
+    }
+
+    /**
+     * @param bool $multiple
+     *
+     * @return $this
+     */
+    public function setMultiple(bool $multiple = true)
+    {
+        if ($multiple) {
+            $this->getField()->addAttribute('multiple', 'multiple');
+        } else {
+            $this->getField()->removeAttribute('multiple');
+        }
+
+        return $this;
     }
 
     /**
