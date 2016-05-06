@@ -30,14 +30,12 @@ class Select extends AbstractField
     public function __construct(string $name, string $label = null, array $options = [])
     {
         parent::__construct('<select>', $name, $label);
-        $this->options = $options;
 
-        $isAssociative = array_keys($this->options) !== range(0, count($this->options) - 1);
-
+        $isAssociative = array_keys($options) !== range(0, count($options) - 1);
         $this->addOption("", "&nbsp;");
 
-        foreach ($this->options as $key => $value) {
-            $this->addOption((string) $key, $isAssociative ? (string) $key : (string) $value);
+        foreach ($options as $key => $value) {
+            $this->addOption((string) $key, $isAssociative ? (string) $value : (string) $key);
         }
     }
 
@@ -52,10 +50,9 @@ class Select extends AbstractField
         $option = new HtmlElement('<option>');
         $option->setContent((string) $value);
         $option->addAttribute('value', $key);
+        $this->getField()->add($option);
 
         $this->options[$key] = $value;
-
-        $this->getField()->add($option);
 
         return $this;
     }
