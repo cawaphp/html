@@ -13,14 +13,8 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms;
 
-use Cawa\App\HttpFactory;
-use Cawa\Controller\ViewController;
-use Cawa\Html\Forms\Fields\AbstractField;
 use Cawa\Html\Forms\Fields\File;
-use Cawa\Html\Forms\Fields\Hidden;
-use Cawa\Http\ParameterTrait;
 use Cawa\Renderer\HtmlContainer;
-use Cawa\Session\SessionFactory;
 
 class Fieldset extends HtmlContainer
 {
@@ -39,5 +33,4 @@ class Fieldset extends HtmlContainer
     {
         return $this->elements;
     }
-
 }

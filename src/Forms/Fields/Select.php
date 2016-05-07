@@ -32,7 +32,7 @@ class Select extends AbstractField
         parent::__construct('<select>', $name, $label);
 
         $isAssociative = array_keys($options) !== range(0, count($options) - 1);
-        $this->addOption("", "&nbsp;");
+        $this->addOption('', '&nbsp;');
 
         foreach ($options as $key => $value) {
             $this->addOption((string) $key, $isAssociative ? (string) $value : (string) $key);
