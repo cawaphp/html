@@ -68,6 +68,7 @@ class Group extends HtmlContainer
     {
         return $this->container->elements;
     }
+
     /**
      * @var Label|HtmlElement
      */
