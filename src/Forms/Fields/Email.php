@@ -24,4 +24,12 @@ class Email extends AbstractField
         parent::__construct('<input />', $name, $label);
         $this->getField()->addAttribute('type', 'email');
     }
+
+    /**
+     * @return bool
+     */
+    public function isValid() : bool
+    {
+        return filter_var($this->getValue(), FILTER_VALIDATE_EMAIL) !== false;
+    }
 }
