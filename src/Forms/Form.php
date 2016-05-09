@@ -207,7 +207,7 @@ class Form extends HtmlContainer
     }
 
     /**
-     * @param AbstractField|Group $field
+     * @param AbstractField|Group|Fieldset $field
      *
      * @return bool
      */
@@ -217,7 +217,7 @@ class Form extends HtmlContainer
             return false;
         }
 
-        if ($field instanceof Group) {
+        if ($field instanceof Group || $field instanceof Fieldset) {
             $elements = $field->getFields();
         } elseif ($field instanceof AbstractField) {
             $elements = [$field];
@@ -228,89 +228,103 @@ class Form extends HtmlContainer
             ));
         }
 
-        $arrayName = [];
         foreach ($elements as $element) {
-            if (!$name = $element->getName()) {
-                return false;
-            }
-
-            // index name array
-            if (substr($name, -2) == '[]') {
-                $currentName = substr($name, 0, -2);
-                if (!isset($arrayName[$currentName])) {
-                    $arrayName[$currentName] = 0;
-                } else {
-                    $arrayName[$currentName]++;
-                }
-
-                $name = $currentName . '[' . $arrayName[$currentName] . ']';
-            }
-
-            if ($element instanceof File) {
-                $userInput = $this->request()->getUploadedFile($element->getName());
+            if ($element instanceof AbstractField) {
+                $this->getFieldValue($element);
             } else {
-                $userInput = $this->request()->getArg($name);
-            }
-
-            $element->setValue($userInput);
-
-            $value = [
-                'userInput' => $userInput,
-                'valid' => true,
-                'value' => null,
-            ];
-
-            if ($element->isRequired() && is_null($userInput)) {
-                $value['valid'] = false;
-            }
-
-            if ($element->getPrimitiveType()) {
-                $typeReturn = $this->validateType($userInput, $element->getPrimitiveType());
-                if (is_null($typeReturn)) {
-                    $value['valid'] = false;
-                } else {
-                    $value['value'] = $typeReturn;
-                }
-            } else {
-                $value['value'] = $userInput;
-            }
-
-            if (method_exists($element, 'isValid') && $value['valid'] == true) {
-                $value['valid'] = $element->isValid();
-            }
-
-            if (!$value['valid']) {
-                unset($value['value']);
-            }
-
-            $this->values[$name] = $value;
-
-            // store array in friendly property
-            if (stripos($name, '[') !== false && isset($value['value']) && $value['value'] != '') {
-                $names = explode('[', str_replace(']', '', $name));
-
-                $valueAsArray = [];
-                $ref = &$valueAsArray;
-                $leave = false;
-
-                while ($leave == false) {
-                    $key = array_shift($names);
-
-                    if (is_null($key)) {
-                        $leave = true;
-                        $ref = $value['value'];
-                    } else {
-                        $ref = &$ref[$key];
-                    }
-                }
-
-                $this->valuesAsArray = array_replace_recursive($this->valuesAsArray, $valueAsArray);
+                $this->populateValue($element);
             }
         }
 
         return true;
     }
 
+    /**
+     * @param AbstractField|Group|Fieldset $element
+     *
+     * @return bool
+     */
+    private function getFieldValue($element)
+    {
+        $arrayName = [];
+
+        if (!$name = $element->getName()) {
+            return false;
+        }
+
+        // index name array
+        if (substr($name, -2) == '[]') {
+            $currentName = substr($name, 0, -2);
+            if (!isset($arrayName[$currentName])) {
+                $arrayName[$currentName] = 0;
+            } else {
+                $arrayName[$currentName]++;
+            }
+
+            $name = $currentName . '[' . $arrayName[$currentName] . ']';
+        }
+
+        if ($element instanceof File) {
+            $userInput = $this->request()->getUploadedFile($element->getName());
+        } else {
+            $userInput = $this->request()->getArg($name);
+        }
+
+        $element->setValue($userInput);
+
+        $value = [
+            'userInput' => $userInput,
+            'valid' => true,
+            'value' => null,
+        ];
+
+        if ($element->isRequired() && is_null($userInput)) {
+            $value['valid'] = false;
+        }
+
+        if ($element->getPrimitiveType()) {
+            $typeReturn = $this->validateType($userInput, $element->getPrimitiveType());
+            if (is_null($typeReturn)) {
+                $value['valid'] = false;
+            } else {
+                $value['value'] = $typeReturn;
+            }
+        } else {
+            $value['value'] = $userInput;
+        }
+
+        if (method_exists($element, 'isValid') && $value['valid'] == true && $element->getValue()) {
+            $value['valid'] = $element->isValid();
+        }
+
+        if (!$value['valid']) {
+            unset($value['value']);
+        }
+
+        $this->values[$name] = $value;
+
+        // store array in friendly property
+        if (stripos($name, '[') !== false && isset($value['value']) && $value['value'] != '') {
+            $names = explode('[', str_replace(']', '', $name));
+
+            $valueAsArray = [];
+            $ref = &$valueAsArray;
+            $leave = false;
+
+            while ($leave == false) {
+                $key = array_shift($names);
+
+                if (is_null($key)) {
+                    $leave = true;
+                    $ref = $value['value'];
+                } else {
+                    $ref = &$ref[$key];
+                }
+            }
+
+            $this->valuesAsArray = array_replace_recursive($this->valuesAsArray, $valueAsArray);
+        }
+    }
     /**
      * @return bool
      */
