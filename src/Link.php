@@ -18,6 +18,7 @@ use Cawa\Renderer\HtmlContainer;
 
 class Link extends HtmlContainer
 {
+    use LinkTrait;
 
     /**
      * @param string|null $content
@@ -29,48 +30,5 @@ class Link extends HtmlContainer
         if ($link) {
             $this->setHref($link);
         }
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getHref()
-    {
-        return $this->getAttribute('href');
-    }
-
-    /**
-     * @param string $href
-     *
-     * @return $this
-     */
-    public function setHref(string $href) : self
-    {
-        $this->addAttribute('href', $href);
-
-        return $this;
-    }
-
-    /**
-     * @return null|Uri
-     */
-    public function getUri()
-    {
-        $href = $this->getAttribute('href');
-        if (!$href) {
-            return null;
-        }
-
-        return new Uri($href);
-    }
-
-    /**
-     * @param Uri $uri
-     *
-     * @return Link
-     */
-    public function setUri(Uri $uri) : self
-    {
-        return $this->setHref($uri->get());
     }
 }
