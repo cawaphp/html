@@ -228,9 +228,11 @@ class Form extends HtmlContainer
             ));
         }
 
+        $arrayName = [];
+
         foreach ($elements as $element) {
             if ($element instanceof AbstractField) {
-                $this->getFieldValue($element);
+                $this->getFieldValue($element, $arrayName);
             } else {
                 $this->populateValue($element);
             }
@@ -241,13 +243,12 @@ class Form extends HtmlContainer
 
     /**
      * @param AbstractField|Group|Fieldset $element
+     * @param array $arrayName
      *
      * @return bool
      */
-    private function getFieldValue($element)
+    private function getFieldValue($element, array &$arrayName)
     {
-        $arrayName = [];
-
         if (!$name = $element->getName()) {
             return false;
         }
@@ -326,7 +327,10 @@ class Form extends HtmlContainer
 
             $this->valuesAsArray = array_replace_recursive($this->valuesAsArray, $valueAsArray);
         }
+
+        return true;
     }
+
     /**
      * @return bool
      */
