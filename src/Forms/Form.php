@@ -270,6 +270,8 @@ class Form extends HtmlContainer
             $userInput = $this->request()->getArg($name);
         }
 
+        $userInput = $userInput != "" ? $userInput : null;
+
         $element->setValue($userInput);
 
         $value = [
@@ -282,7 +284,7 @@ class Form extends HtmlContainer
             $value['valid'] = false;
         }
 
-        if ($element->getPrimitiveType()) {
+        if ($element->getPrimitiveType() && !is_null($userInput)) {
             $typeReturn = $this->validateType($userInput, $element->getPrimitiveType());
             if (is_null($typeReturn)) {
                 $value['valid'] = false;
