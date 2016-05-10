@@ -271,7 +271,7 @@ class Form extends HtmlContainer
             $userInput = $this->request()->getArg($name);
         }
 
-        $userInput = $userInput != "" ? $userInput : null;
+        $userInput = $userInput != '' ? $userInput : null;
 
         $element->setValue($userInput);
 

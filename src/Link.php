@@ -13,7 +13,6 @@ declare (strict_types=1);
 
 namespace Cawa\Html;
 
-use Cawa\Net\Uri;
 use Cawa\Renderer\HtmlContainer;
 
 class Link extends HtmlContainer
