@@ -71,7 +71,7 @@ class Select extends AbstractField implements MultipleValueInterface
             $value = [$value];
         }
 
-        foreach($value as $currentValue) {
+        foreach ($value as $currentValue) {
             if ($currentValue == '') {
                 continue;
             }
@@ -88,7 +88,7 @@ class Select extends AbstractField implements MultipleValueInterface
             foreach ($this->getField()->elements as $element) {
                 if ($element->getAttribute('value') == $currentValue) {
                     $element->addAttribute('selected', 'selected');
-                } else if (!$isArray) {
+                } elseif (!$isArray) {
                     $element->removeAttribute('selected');
                 }
             }

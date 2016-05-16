@@ -23,7 +23,6 @@ use Cawa\Http\ParameterTrait;
 use Cawa\Net\Uri;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Session\SessionFactory;
-use DeepCopy\DeepCopy;
 
 class Form extends HtmlContainer
 {
@@ -268,7 +267,6 @@ class Form extends HtmlContainer
             $name = $currentName . '[' . $arrayName[$currentName] . ']';
         }
 
-
         if ($element instanceof File) {
             $userInput = $this->request()->getUploadedFile($element->getName());
         } else {
@@ -434,7 +432,7 @@ class Form extends HtmlContainer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function render()
     {
@@ -444,7 +442,7 @@ class Form extends HtmlContainer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function renderOuter() : array
     {
@@ -467,7 +465,7 @@ class Form extends HtmlContainer
             $uri = new Uri($this->getAction());
             if ($uri->getQueries()) {
                 foreach ($uri->getQueries() as $key => $value) {
-                    if (isset($this->values[$key])) {
+                    if (isset($this->values[$key]) || isset($this->values[$key . '[]'])) {
                         continue;
                     }
 
@@ -478,7 +476,6 @@ class Form extends HtmlContainer
                             $this->add(new Hidden($key . '[]', $current));
                         }
                     }
-
 
                     $this->setAction($uri->removeAllQueries()->get());
                 }
