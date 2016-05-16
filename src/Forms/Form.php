@@ -18,9 +18,12 @@ use Cawa\Controller\ViewController;
 use Cawa\Html\Forms\Fields\AbstractField;
 use Cawa\Html\Forms\Fields\File;
 use Cawa\Html\Forms\Fields\Hidden;
+use Cawa\Html\Forms\FieldsProperties\MultipleValueInterface;
 use Cawa\Http\ParameterTrait;
+use Cawa\Net\Uri;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Session\SessionFactory;
+use DeepCopy\DeepCopy;
 
 class Form extends HtmlContainer
 {
@@ -254,7 +257,7 @@ class Form extends HtmlContainer
         }
 
         // index name array
-        if (substr($name, -2) == '[]') {
+        if (substr($name, -2) == '[]' && !$element instanceof MultipleValueInterface) {
             $currentName = substr($name, 0, -2);
             if (!isset($arrayName[$currentName])) {
                 $arrayName[$currentName] = 0;
@@ -265,14 +268,18 @@ class Form extends HtmlContainer
             $name = $currentName . '[' . $arrayName[$currentName] . ']';
         }
 
+
         if ($element instanceof File) {
             $userInput = $this->request()->getUploadedFile($element->getName());
         } else {
             $userInput = $this->request()->getArg($name);
         }
 
+        // trace($name, $userInput);
+
         $userInput = $userInput != '' ? $userInput : null;
 
+        // trace($userInput, $name);
         $element->setValue($userInput);
 
         $value = [
@@ -426,14 +433,56 @@ class Form extends HtmlContainer
         return $return;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function render()
+    {
+        $this->alterBeforeRender();
+
+        return parent::render();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function renderOuter() : array
+    {
+        $this->alterBeforeRender();
+
+        return parent::renderOuter();
+    }
+
+    /**
+     *
+     */
+    protected function alterBeforeRender()
     {
         if ($this->csrf) {
             $this->addCsrf();
         }
 
-        $return = parent::render();
+        // append all querystring
+        if ($this->getMethod() == 'GET') {
+            $uri = new Uri($this->getAction());
+            if ($uri->getQueries()) {
+                foreach ($uri->getQueries() as $key => $value) {
+                    if (isset($this->values[$key])) {
+                        continue;
+                    }
 
-        return $return;
+                    if (!is_array($value)) {
+                        $this->add(new Hidden($key, $value));
+                    } else {
+                        foreach ($value as $current) {
+                            $this->add(new Hidden($key . '[]', $current));
+                        }
+                    }
+
+
+                    $this->setAction($uri->removeAllQueries()->get());
+                }
+            }
+        }
     }
 }

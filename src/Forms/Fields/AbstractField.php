@@ -35,7 +35,7 @@ abstract class AbstractField extends HtmlContainer
 
         $this->add($this->field);
 
-        if (!is_null($label)) {
+        if ($label) {
             $this->setLabel($label);
         }
     }

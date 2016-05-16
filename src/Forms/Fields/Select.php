@@ -13,10 +13,14 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms\Fields;
 
+use Cawa\Html\Forms\FieldsProperties\MultipleTrait;
+use Cawa\Html\Forms\FieldsProperties\MultipleValueInterface;
 use Cawa\Renderer\HtmlElement;
 
-class Select extends AbstractField
+class Select extends AbstractField implements MultipleValueInterface
 {
+    use MultipleTrait;
+
     /**
      * @var array
      */
@@ -58,48 +62,35 @@ class Select extends AbstractField
     }
 
     /**
-     * @return bool
-     */
-    public function isMultiple() : bool
-    {
-        return $this->getField()->hasAttribute('multiple');
-    }
-
-    /**
-     * @param bool $multiple
-     *
-     * @return $this
-     */
-    public function setMultiple(bool $multiple = true)
-    {
-        if ($multiple) {
-            $this->getField()->addAttribute('multiple', 'multiple');
-        } else {
-            $this->getField()->removeAttribute('multiple');
-        }
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setValue($value) : parent
     {
-        if (!in_array($value, array_keys($this->options)) && $value != '') {
-            throw new \InvalidArgumentException(sprintf(
-                "Invalid option value '%s' for select '%s'",
-                $value,
-                $this->getName()
-            ));
+        $isArray = is_array($value);
+        if (!is_array($value)) {
+            $value = [$value];
         }
 
-        /** @var HtmlElement $element */
-        foreach ($this->getField()->elements as $element) {
-            if ($element->getAttribute('value') == $value) {
-                $element->addAttribute('selected', 'selected');
-            } else {
-                $element->removeAttribute('selected');
+        foreach($value as $currentValue) {
+            if ($currentValue == '') {
+                continue;
+            }
+
+            if (!in_array($currentValue, array_keys($this->options))) {
+                throw new \InvalidArgumentException(sprintf(
+                    "Invalid option value '%s' for select '%s'",
+                    $currentValue,
+                    $this->getName()
+                ));
+            }
+
+            /** @var HtmlElement $element */
+            foreach ($this->getField()->elements as $element) {
+                if ($element->getAttribute('value') == $currentValue) {
+                    $element->addAttribute('selected', 'selected');
+                } else if (!$isArray) {
+                    $element->removeAttribute('selected');
+                }
             }
         }
 
