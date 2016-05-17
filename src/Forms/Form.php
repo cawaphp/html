@@ -57,7 +57,11 @@ class Form extends HtmlContainer
      */
     public function setName($name) : self
     {
-        return $this->addAttribute('name', $name)->setCsrf(true);
+        if ($this->getMethod() != "GET") {
+            $this->setCsrf(true);
+        }
+
+        return $this->addAttribute('name', $name);
     }
 
     /**
@@ -75,6 +79,10 @@ class Form extends HtmlContainer
      */
     public function setMethod(string $method) : self
     {
+        if ($method == "GET") {
+            $this->setCsrf(false);
+        }
+
         return $this->addAttribute('method', $method);
     }
 
@@ -273,11 +281,8 @@ class Form extends HtmlContainer
             $userInput = $this->request()->getArg($name);
         }
 
-        // trace($name, $userInput);
-
         $userInput = $userInput != '' ? $userInput : null;
 
-        // trace($userInput, $name);
         $element->setValue($userInput);
 
         $value = [
@@ -341,7 +346,15 @@ class Form extends HtmlContainer
      */
     public function isSubmit() : bool
     {
+        if ($this->getMethod() == "GET" && !$this->getName()) {
+            throw new \LogicException("Can't test isSubmit without form name on method GET");
+        }
+
         if ($this->request()->getMethod() != $this->getMethod()) {
+            return false;
+        }
+
+        if ($this->getMethod() == "GET" && !$this->request()->getQuery($this->getName(), 'bool')) {
             return false;
         }
 
@@ -460,8 +473,11 @@ class Form extends HtmlContainer
             $this->addCsrf();
         }
 
-        // append all querystring
+        // append all querystring && input hidden for submit
         if ($this->getMethod() == 'GET') {
+            $this->add(new Hidden($this->getName(), "1"));
+
+
             $uri = new Uri($this->getAction());
             if ($uri->getQueries()) {
                 foreach ($uri->getQueries() as $key => $value) {
