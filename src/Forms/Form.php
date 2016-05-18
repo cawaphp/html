@@ -57,7 +57,7 @@ class Form extends HtmlContainer
      */
     public function setName($name) : self
     {
-        if ($this->getMethod() != "GET") {
+        if ($this->getMethod() != 'GET') {
             $this->setCsrf(true);
         }
 
@@ -79,7 +79,7 @@ class Form extends HtmlContainer
      */
     public function setMethod(string $method) : self
     {
-        if ($method == "GET") {
+        if ($method == 'GET') {
             $this->setCsrf(false);
         }
 
@@ -346,7 +346,7 @@ class Form extends HtmlContainer
      */
     public function isSubmit() : bool
     {
-        if ($this->getMethod() == "GET" && !$this->getName()) {
+        if ($this->getMethod() == 'GET' && !$this->getName()) {
             throw new \LogicException("Can't test isSubmit without form name on method GET");
         }
 
@@ -354,7 +354,7 @@ class Form extends HtmlContainer
             return false;
         }
 
-        if ($this->getMethod() == "GET" && !$this->request()->getQuery($this->getName(), 'bool')) {
+        if ($this->getMethod() == 'GET' && !$this->request()->getQuery($this->getName(), 'bool')) {
             return false;
         }
 
@@ -475,8 +475,7 @@ class Form extends HtmlContainer
 
         // append all querystring && input hidden for submit
         if ($this->getMethod() == 'GET') {
-            $this->add(new Hidden($this->getName(), "1"));
-
+            $this->add(new Hidden($this->getName(), '1'));
 
             $uri = new Uri($this->getAction());
             if ($uri->getQueries()) {
