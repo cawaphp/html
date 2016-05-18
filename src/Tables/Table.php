@@ -171,7 +171,9 @@ class Table extends HtmlContainer
                     $content = $row[$column->getId()] ?? '';
 
                     if ($column->getRenderer()) {
-                        $content = call_user_func($column->getRenderer(), $content, $this->getPrimaryValues($row));
+                        foreach ($column->getRenderer() as $renderer) {
+                            $content = $renderer($content, $column, $this->getPrimaryValues($row), $row);
+                        }
                     }
 
                     $td->setContent((string) $content);

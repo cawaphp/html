@@ -13,6 +13,7 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Tables;
 
+use Cawa\Html\Tables\ColumnRenderer\AbstractRenderer;
 use Cawa\Renderer\HtmlContainer;
 
 class Column extends HtmlContainer
@@ -153,26 +154,26 @@ class Column extends HtmlContainer
     }
 
     /**
-     * @var callable
+     * @var callable[]|AbstractRenderer[]
      */
-    private $renderer;
+    private $renderer = [];
 
     /**
-     * @return callable
+     * @return callable[]|AbstractRenderer[]
      */
-    public function getRenderer()
+    public function getRenderer() : array
     {
         return $this->renderer;
     }
 
     /**
-     * @param callable $renderer
+     * @param callable|AbstractRenderer[] $renderer
      *
      * @return $this
      */
-    public function setRenderer(callable $renderer) : self
+    public function addRenderer($renderer) : self
     {
-        $this->renderer = $renderer;
+        $this->renderer[] = $renderer;
 
         return $this;
     }
