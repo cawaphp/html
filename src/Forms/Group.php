@@ -119,7 +119,7 @@ class Group extends HtmlContainer
      *
      * @return $this
      */
-    protected function setField(HtmlContainer $field = null) : self
+    protected function setField($field = null) : self
     {
         $index = $this->getIndex($this->container);
         $this->container = $field;
