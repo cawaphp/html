@@ -62,6 +62,27 @@ class Select extends AbstractField implements MultipleValueInterface
     }
 
     /**
+     * @return string|array
+     */
+    public function getValue()
+    {
+        $return = [];
+
+        /** @var HtmlElement $element */
+        foreach ($this->getField()->elements as $element) {
+            if ($element->getAttribute('selected') == 'selected') {
+                $return[] = $element->getAttribute("value");
+            }
+        }
+
+        if ($this->isMultiple()) {
+            return $return;
+        } else {
+            return $return[0] ?? null;
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setValue($value) : parent
