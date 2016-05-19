@@ -477,6 +477,7 @@ class Form extends HtmlContainer
         if ($this->getMethod() == 'GET') {
             $this->add(new Hidden($this->getName(), '1'));
 
+            /*
             $uri = new Uri($this->getAction());
             if ($uri->getQueries()) {
                 foreach ($uri->getQueries() as $key => $value) {
@@ -495,6 +496,7 @@ class Form extends HtmlContainer
                     $this->setAction($uri->removeAllQueries()->get());
                 }
             }
+            */
         }
     }
 }
