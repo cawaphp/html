@@ -197,7 +197,7 @@ abstract class AbstractField extends HtmlContainer
      *
      * @return $this
      */
-    public function setContent(string $content) : parent
+    public function setContent($content) : parent
     {
         $this->field->setContent($content);
 
