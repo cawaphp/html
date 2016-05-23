@@ -13,9 +13,10 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms\Fields;
 
+use Cawa\Html\Forms\FieldsProperties\MultipleValueInterface;
 use Cawa\Html\Forms\Form;
 
-class File extends AbstractField
+class File extends AbstractField implements MultipleValueInterface
 {
     /**
      * @param string $name
@@ -28,12 +29,12 @@ class File extends AbstractField
     }
 
     /**
-     * @var \Cawa\Http\File
+     * @var \Cawa\Http\File[]
      */
     private $value;
 
     /**
-     * @return \Cawa\Http\File
+     * @return \Cawa\Http\File[]
      */
     public function getValue()
     {
@@ -41,18 +42,24 @@ class File extends AbstractField
     }
 
     /**
-     * @param \Cawa\Http\File $value
+     * @param \Cawa\Http\File[] $value
      *
      * @return File
      */
     public function setValue($value) : parent
     {
-        if (!$value instanceof \Cawa\Http\File && !is_null($value)) {
-            throw new \LogicException(sprintf(
-                "File '%s' value must be an instance of \\Cawa\\Http\\File, '%s' given",
-                $this->getName(),
-                is_object($value) ? get_class($value) : gettype($value)
-            ));
+        if (!is_array($value)) {
+            $value = [$value];
+        }
+
+        foreach ($value as $current) {
+            if (!$current instanceof \Cawa\Http\File && !is_null($current)) {
+                throw new \LogicException(sprintf(
+                    "File '%s' value must be an instance of \\Cawa\\Http\\File, '%s' given",
+                    $this->getName(),
+                    is_object($current) ? get_class($current) : gettype($current)
+                ));
+            }
         }
 
         $this->value = $value;

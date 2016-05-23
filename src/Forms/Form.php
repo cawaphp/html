@@ -276,7 +276,7 @@ class Form extends HtmlContainer
         }
 
         if ($element instanceof File) {
-            $userInput = $this->request()->getUploadedFile($element->getName());
+            $userInput = $this->request()->getUploadedFile($name);
         } else {
             $userInput = $this->request()->getArg($name);
         }
@@ -319,6 +319,9 @@ class Form extends HtmlContainer
         // store array in friendly property
         if (stripos($name, '[') !== false && isset($value['value']) && $value['value'] != '') {
             $names = explode('[', str_replace(']', '', $name));
+            if ($names[sizeof($names) -1] == "") {
+                array_pop($names);
+            }
 
             $valueAsArray = [];
             $ref = &$valueAsArray;
