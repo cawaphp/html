@@ -13,6 +13,8 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms\Fields;
 
+use Cawa\Date\Time as TimeObject;
+
 class Time extends AbstractField
 {
     /**
@@ -23,5 +25,21 @@ class Time extends AbstractField
     {
         parent::__construct('<input />', $name, $label);
         $this->getField()->addAttribute('type', 'time');
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue($value) : parent
+    {
+        if ($value instanceof TimeObject) {
+            $value = $value->format();
+        } elseif (is_string($value) && $value) {
+            $date = new TimeObject($value);
+            $value = $date->format();
+        }
+
+        return parent::setValue($value);
     }
 }
