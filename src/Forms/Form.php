@@ -304,7 +304,6 @@ class Form extends HtmlContainer
             $value['value'] = $userInput;
         }
 
-
         if (method_exists($element, 'isValid') && $value['valid'] == true && $element->getValue()) {
             $value['valid'] = $element->isValid();
         }
@@ -321,7 +320,7 @@ class Form extends HtmlContainer
         // store array in friendly property
         if (stripos($name, '[') !== false && isset($value['value']) && $value['value'] != '') {
             $names = explode('[', str_replace(']', '', $name));
-            if ($names[sizeof($names) -1] == "") {
+            if ($names[sizeof($names) -1] == '') {
                 array_pop($names);
             }
 
