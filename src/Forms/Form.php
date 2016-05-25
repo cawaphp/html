@@ -283,8 +283,6 @@ class Form extends HtmlContainer
 
         $userInput = $userInput != '' ? $userInput : null;
 
-        $element->setValue($userInput);
-
         $value = [
             'userInput' => $userInput,
             'valid' => true,
@@ -306,6 +304,7 @@ class Form extends HtmlContainer
             $value['value'] = $userInput;
         }
 
+
         if (method_exists($element, 'isValid') && $value['valid'] == true && $element->getValue()) {
             $value['valid'] = $element->isValid();
         }
@@ -313,6 +312,9 @@ class Form extends HtmlContainer
         if (!$value['valid']) {
             unset($value['value']);
         }
+
+        // We set values with type cast value if valid, else type cast, else user input
+        $element->setValue($value['value'] ?: (isset($typeReturn) ? $typeReturn : $userInput));
 
         $this->values[$name] = $value;
 
