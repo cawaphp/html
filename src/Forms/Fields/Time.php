@@ -27,7 +27,6 @@ class Time extends AbstractField
         $this->getField()->addAttribute('type', 'time');
     }
 
-
     /**
      * {@inheritdoc}
      */

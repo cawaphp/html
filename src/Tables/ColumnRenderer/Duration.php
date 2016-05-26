@@ -27,7 +27,7 @@ class Duration extends AbstractRenderer
     public function __invoke($content, Column $column, array $primaryValues, array $data) : string
     {
         if (!$content) {
-            return "";
+            return '';
         }
 
         if (is_string($content)) {
