@@ -34,6 +34,8 @@ class DateTimeDifference extends AbstractRenderer
             $content = new DateTime($content);
         }
 
-        return '<abbr title="' . $content->display() . '">' . $content->diffForHumans(DateTime::now(), true) . '</abbr>';
+        return '<abbr title="' . $content->display() . '">' .
+            $content->diffForHumans(DateTime::now(), true) .
+            '</abbr>';
     }
 }
