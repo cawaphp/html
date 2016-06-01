@@ -224,7 +224,7 @@ abstract class AbstractField extends HtmlContainer
         }
 
         if (!is_null($value)) {
-            $this->field->addAttribute('value', $value);
+            $this->field->addAttribute('value', (string) $value);
         }
 
         return $this;

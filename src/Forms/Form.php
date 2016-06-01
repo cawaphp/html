@@ -172,12 +172,13 @@ class Form extends HtmlContainer
             return $this->valuesAsArray[$name];
         }
 
-        if (!isset($this->values[$name])) {
+        if (!array_key_exists($name, $this->values)) {
             return null;
         }
 
         $return = $this->values[$name]['value'] ?? null;
-        if ($return == '') {
+
+        if ($return === '') {
             $return = null;
         }
 
@@ -239,16 +240,17 @@ class Form extends HtmlContainer
         }
 
         $arrayName = [];
+        $return = true;
 
         foreach ($elements as $element) {
             if ($element instanceof AbstractField) {
-                $this->getFieldValue($element, $arrayName);
+                $return = !$this->getFieldValue($element, $arrayName) ? false : $return;
             } else {
-                $this->populateValue($element);
+                $return = !$this->populateValue($element) ? false : $return;
             }
         }
 
-        return true;
+        return $return;
     }
 
     /**
@@ -313,7 +315,7 @@ class Form extends HtmlContainer
         }
 
         // We set values with type cast value if valid, else type cast, else user input
-        $element->setValue($value['value'] ?: (isset($typeReturn) ? $typeReturn : $userInput));
+        $element->setValue($value['value'] ?? (isset($typeReturn) ? $typeReturn : $userInput));
 
         $this->values[$name] = $value;
 
