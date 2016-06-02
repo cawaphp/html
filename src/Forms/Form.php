@@ -218,6 +218,11 @@ class Form extends HtmlContainer
     }
 
     /**
+     * @var array
+     */
+    private $arrayNameIndex = [];
+
+    /**
      * @param AbstractField|Group|Fieldset $field
      *
      * @return bool
@@ -239,12 +244,11 @@ class Form extends HtmlContainer
             ));
         }
 
-        $arrayName = [];
         $return = true;
 
         foreach ($elements as $element) {
             if ($element instanceof AbstractField) {
-                $return = !$this->getFieldValue($element, $arrayName) ? false : $return;
+                $return = !$this->getFieldValue($element) ? false : $return;
             } else {
                 $return = !$this->populateValue($element) ? false : $return;
             }
@@ -255,11 +259,10 @@ class Form extends HtmlContainer
 
     /**
      * @param AbstractField|Group|Fieldset $element
-     * @param array $arrayName
      *
      * @return bool
      */
-    private function getFieldValue($element, array &$arrayName)
+    private function getFieldValue($element)
     {
         if (!$name = $element->getName()) {
             return false;
@@ -268,13 +271,13 @@ class Form extends HtmlContainer
         // index name array
         if (substr($name, -2) == '[]' && !$element instanceof MultipleValueInterface) {
             $currentName = substr($name, 0, -2);
-            if (!isset($arrayName[$currentName])) {
-                $arrayName[$currentName] = 0;
+            if (!isset($this->arrayNameIndex[$currentName])) {
+                $this->arrayNameIndex[$currentName] = 0;
             } else {
-                $arrayName[$currentName]++;
+                $this->arrayNameIndex[$currentName]++;
             }
 
-            $name = $currentName . '[' . $arrayName[$currentName] . ']';
+            $name = $currentName . '[' . $this->arrayNameIndex[$currentName] . ']';
         }
 
         if ($element instanceof File) {
