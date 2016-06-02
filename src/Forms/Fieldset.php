@@ -46,7 +46,7 @@ class Fieldset extends HtmlContainer
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function add(ViewController ...$elements)
     {
@@ -58,7 +58,7 @@ class Fieldset extends HtmlContainer
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function addFirst(ViewController ...$elements)
     {

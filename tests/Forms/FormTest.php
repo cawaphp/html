@@ -54,7 +54,6 @@ class UriTest extends TestCase
         }
     }
 
-
     /**
      * @return array
      */
@@ -115,5 +114,4 @@ class UriTest extends TestCase
             ],
         ];
     }
-
 }
