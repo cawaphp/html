@@ -73,6 +73,22 @@ trait CheckableTrait
     }
 
     /**
+     * @param bool $checked
+     *
+     * @return self
+     */
+    public function setChecked(bool $checked) : self
+    {
+        if ($checked) {
+            $this->getField()->addAttribute('checked', 'checked');
+        } else {
+            $this->getField()->removeAttribute('checked');
+        }
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     protected function renderCheckable()
