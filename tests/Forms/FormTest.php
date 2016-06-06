@@ -62,19 +62,19 @@ class UriTest extends TestCase
         return [
             [
                 ['name' => 'text'],
-                [Text::create('name')],
+                [(new Text('name'))],
                 'name'
             ],
 
             [
                 ['name' => ''],
-                [Text::create('name')],
+                [(new Text('name'))],
                 'name'
             ],
 
             [
                 ['name' => ['text']],
-                [Text::create('name[]')],
+                [(new Text('name[]'))],
                 'name'
             ],
 
@@ -88,27 +88,27 @@ class UriTest extends TestCase
                     ],
                 ],
                 [
-                    Text::create('name[key][1]'),
-                    Text::create('name[key][2]'),
+                    (new Text('name[key][1]')),
+                    (new Text('name[key][2]')),
                 ],
                 'name',
             ],
 
             [
                 ['name' => ['text1','text2']],
-                [Text::create('name[]'), Text::create('name[]')],
+                [new Text('name[]'), new Text('name[]')],
                 'name',
             ],
 
             [
                 ['name' => ['key' => ['text1','text2']]],
-                [Text::create('name[key][]'), Text::create('name[key][]')],
+                [new Text('name[key][]'), new Text('name[key][]')],
                 'name',
             ],
 
             [
                 ['name' => ['text1', 'text2']],
-                [Text::create('name[]')],
+                [(new Text('name[]'))],
                 'name',
                 ['text1'],
             ],

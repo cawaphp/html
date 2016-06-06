@@ -28,7 +28,7 @@ class Fieldset extends HtmlContainer
         parent::__construct('<fieldset>');
 
         if ($legend) {
-            $this->add(HtmlElement::create('<legend>', $legend));
+            $this->add(new HtmlElement('<legend>', $legend));
         }
     }
 

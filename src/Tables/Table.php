@@ -26,8 +26,8 @@ class Table extends HtmlContainer
     public function __construct()
     {
         parent::__construct('<table>');
-        $this->thead = HtmlContainer::create('<thead>');
-        $this->tbody = HtmlContainer::create('<tbody>');
+        $this->thead = (new HtmlContainer('<thead>'));
+        $this->tbody = (new HtmlContainer('<tbody>'));
 
         $this->elements[] = $this->thead;
         $this->elements[] = $this->tbody;
@@ -161,12 +161,12 @@ class Table extends HtmlContainer
     public function render()
     {
         foreach ($this->data as $row) {
-            $tr = HtmlContainer::create('<tr>');
+            $tr = (new HtmlContainer('<tr>'));
 
             /** @var Column $column */
             foreach ($this->thead->elements as $column) {
                 if ($column->isVisible()) {
-                    $td = HtmlElement::create('<td>');
+                    $td = (new HtmlElement('<td>'));
                     $td->addClass($column->getClasses());
                     $content = $row[$column->getId()] ?? '';
 
