@@ -328,9 +328,6 @@ class Form extends HtmlContainer
 
         $element->setValue($elementValue);
 
-
-        // !$element instanceof MultipleValueInterface
-
         $this->values[$name] = $value;
 
         // store array in friendly property
