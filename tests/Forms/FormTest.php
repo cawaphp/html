@@ -34,11 +34,10 @@ class UriTest extends TestCase
      * @param array $posts
      * @param AbstractField[] $fields
      * @param string $getValueName
-     * @param array $expected
      *
      * @dataProvider formValueProvider
      */
-    public function testGetValue(array $posts, array $fields, string $getValueName, array $expected = null)
+    public function testGetValue(array $posts, array $fields, string $getValueName)
     {
         $this->request()->setPosts($posts);
         $this->request()->setMethod('POST');
@@ -47,11 +46,7 @@ class UriTest extends TestCase
             $form->add($field);
         }
 
-        if (!is_null($expected) && $posts[$getValueName] === '') {
-            $this->assertNull($form->getValue($getValueName));
-        } else {
-            $this->assertEquals($form->getValue($getValueName), is_null($expected) ? $posts[$getValueName] : $expected);
-        }
+        $this->assertEquals($form->getValue($getValueName), $posts[$getValueName]);
     }
 
     /**
@@ -109,8 +104,7 @@ class UriTest extends TestCase
             [
                 ['name' => ['text1', 'text2']],
                 [(new Text('name[]'))],
-                'name',
-                ['text1'],
+                'name'
             ],
         ];
     }

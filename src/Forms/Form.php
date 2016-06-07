@@ -269,6 +269,7 @@ class Form extends HtmlContainer
         }
 
         // index name array
+        /*
         if (substr($name, -2) == '[]' && !$element instanceof MultipleValueInterface) {
             $currentName = substr($name, 0, -2);
             if (!isset($this->arrayNameIndex[$currentName])) {
@@ -279,6 +280,7 @@ class Form extends HtmlContainer
 
             $name = $currentName . '[' . $this->arrayNameIndex[$currentName] . ']';
         }
+        */
 
         if ($element instanceof File) {
             $userInput = $this->request()->getUploadedFile($name);
@@ -318,7 +320,16 @@ class Form extends HtmlContainer
         }
 
         // We set values with type cast value if valid, else type cast, else user input
-        $element->setValue($value['value'] ?? (isset($typeReturn) ? $typeReturn : $userInput));
+        $elementValue = $value['value'] ?? (isset($typeReturn) ? $typeReturn : $userInput);
+
+        if (is_array($elementValue) && !$element instanceof MultipleValueInterface) {
+            $elementValue = null;
+        }
+
+        $element->setValue($elementValue);
+
+
+        // !$element instanceof MultipleValueInterface
 
         $this->values[$name] = $value;
 
