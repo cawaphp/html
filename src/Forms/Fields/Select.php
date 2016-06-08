@@ -27,6 +27,11 @@ class Select extends AbstractField implements MultipleValueInterface
     private $options = [];
 
     /**
+     * @var HtmlElement[]
+     */
+    private $optionsElements = [];
+
+    /**
      * @param string $name
      * @param string $label
      * @param array $options
@@ -57,6 +62,7 @@ class Select extends AbstractField implements MultipleValueInterface
         $this->getField()->add($option);
 
         $this->options[$key] = $value;
+        $this->optionsElements[$key] = $option;
 
         return $this;
     }
@@ -116,5 +122,15 @@ class Select extends AbstractField implements MultipleValueInterface
         }
 
         return $this;
+    }
+
+    public function render()
+    {
+        if ($this->isRequired() == false || $this->isMultiple() == true) {
+            $this->optionsElements['']->setRenderable(false);
+        }
+
+
+        return parent::render();
     }
 }
