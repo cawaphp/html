@@ -21,7 +21,7 @@ class Plain extends AbstractField
      */
     public function __construct(string $label, string $content = null)
     {
-        parent::__construct('<p>', null, $label);
+        parent::__construct('<div>', null, $label);
 
         if ($content) {
             $this->setContent($content);
