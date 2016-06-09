@@ -130,7 +130,6 @@ class Select extends AbstractField implements MultipleValueInterface
             $this->optionsElements['']->setRenderable(false);
         }
 
-
         return parent::render();
     }
 }
