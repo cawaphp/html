@@ -13,13 +13,26 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Tables\ColumnRenderer;
 
-use Cawa\Date\DateTime;
+use Cawa\Date\DateTime as DateTimeObject;
 use Cawa\Html\Tables\Column;
 use Cawa\Intl\TranslatorFactory;
 
-class DateTimeDifference extends AbstractRenderer
+class DateTime extends AbstractRenderer
 {
     use TranslatorFactory;
+
+    /**
+     * @var string
+     */
+    private $format;
+
+    /**
+     * @param null $format
+     */
+    public function __construct($format = null)
+    {
+        $this->format = $format;
+    }
 
     /**
      * {@inheritdoc}
@@ -31,11 +44,15 @@ class DateTimeDifference extends AbstractRenderer
         }
 
         if (is_string($content)) {
-            $content = new DateTime($content);
+            $content = new DateTimeObject($content);
         }
 
-        return '<abbr title="' . $content->display() . '">' .
-            $content->diffForHumans(DateTime::now(), true) .
-            '</abbr>';
+        if ($this->format == DateTimeObject::DISPLAY_DURATION) {
+            return '<abbr title="' . $content->display() . '">' .
+                $content->display($this->format) .
+                '</abbr>';
+        } else {
+            return $content->display($this->format);
+        }
     }
 }
