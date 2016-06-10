@@ -46,9 +46,9 @@ class DateTime extends AbstractRenderer
         }
 
         if ($this->format == self::DISPLAY_DURATION_FROMSECONDS) {
-
             $date = new DateTimeObject();
             $date->addSeconds($content);
+
             return $date->display(DateTimeObject::DISPLAY_DURATION);
         }
 

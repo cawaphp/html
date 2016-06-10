@@ -198,7 +198,7 @@ class Table extends HtmlContainer
                             }
                         }
 
-                        $td->setContent((string)$content);
+                        $td->setContent((string) $content);
                         $tr->add($td);
                     }
                 }
@@ -210,14 +210,11 @@ class Table extends HtmlContainer
                 $this->tbody->add($tr);
             }
         } else {
-
             $this->tbody->add((new HtmlContainer('<tr>'))
                 ->add((new HtmlElement('<td>'))
                     ->addAttribute('colspan', (string) sizeof($this->getVisibleColumns()))
                     ->setContent($this->translator()->trans('html.table/noResult'))
-                    ->addClass('text-center')
-                )
-            );
+                    ->addClass('text-center')));
         }
 
         $return = parent::render();
