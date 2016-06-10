@@ -15,16 +15,21 @@ namespace Cawa\Html\Tables;
 
 use Cawa\Bootstrap\Tables\Column;
 use Cawa\Controller\ViewController;
+use Cawa\Intl\TranslatorFactory;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Renderer\HtmlElement;
 
 class Table extends HtmlContainer
 {
+    use TranslatorFactory;
+
     /**
      *
      */
     public function __construct()
     {
+        $this->translator()->addFile(__DIR__ . '/../../lang/global', 'html');
+
         parent::__construct('<table>');
         $this->thead = (new HtmlContainer('<thead>'));
         $this->tbody = (new HtmlContainer('<tbody>'));
@@ -81,6 +86,22 @@ class Table extends HtmlContainer
     public function getColums()
     {
         return $this->thead->elements;
+    }
+
+    /**
+     * @return Column[]
+     */
+    public function getVisibleColumns() : array
+    {
+        $return = [];
+        /** @var Column $column */
+        foreach ($this->thead->elements as $column) {
+            if ($column->isVisible() && $column->isRenderable()) {
+                $return[] = $column;
+            }
+        }
+
+        return $return;
     }
 
     /**
@@ -160,32 +181,43 @@ class Table extends HtmlContainer
      */
     public function render()
     {
-        foreach ($this->data as $row) {
-            $tr = (new HtmlContainer('<tr>'));
+        if (sizeof($this->data)) {
+            foreach ($this->data as $row) {
+                $tr = (new HtmlContainer('<tr>'));
 
-            /** @var Column $column */
-            foreach ($this->thead->elements as $column) {
-                if ($column->isVisible()) {
-                    $td = (new HtmlElement('<td>'));
-                    $td->addClass($column->getClasses());
-                    $content = $row[$column->getId()] ?? '';
+                /** @var Column $column */
+                foreach ($this->thead->elements as $column) {
+                    if ($column->isVisible() && $column->isRenderable()) {
+                        $td = (new HtmlElement('<td>'));
+                        $td->addClass($column->getClasses());
+                        $content = $row[$column->getId()] ?? '';
 
-                    if ($column->getRenderer()) {
-                        foreach ($column->getRenderer() as $renderer) {
-                            $content = $renderer($content, $column, $this->getPrimaryValues($row), $row);
+                        if ($column->getRenderer()) {
+                            foreach ($column->getRenderer() as $renderer) {
+                                $content = $renderer($content, $column, $this->getPrimaryValues($row), $row);
+                            }
                         }
+
+                        $td->setContent((string)$content);
+                        $tr->add($td);
                     }
-
-                    $td->setContent((string) $content);
-                    $tr->add($td);
                 }
-            }
 
-            foreach ($this->renderCallback as $callback) {
-                $tr = call_user_func($callback, $tr, $row);
-            }
+                foreach ($this->renderCallback as $callback) {
+                    $tr = call_user_func($callback, $tr, $row);
+                }
 
-            $this->tbody->add($tr);
+                $this->tbody->add($tr);
+            }
+        } else {
+
+            $this->tbody->add((new HtmlContainer('<tr>'))
+                ->add((new HtmlElement('<td>'))
+                    ->addAttribute('colspan', (string) sizeof($this->getVisibleColumns()))
+                    ->setContent($this->translator()->trans('html.table/noResult'))
+                    ->addClass('text-center')
+                )
+            );
         }
 
         $return = parent::render();

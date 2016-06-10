@@ -21,6 +21,8 @@ class DateTime extends AbstractRenderer
 {
     use TranslatorFactory;
 
+    const DISPLAY_DURATION_FROMSECONDS = 'DURATION_FROMSECONDS';
+
     /**
      * @var string
      */
@@ -41,6 +43,13 @@ class DateTime extends AbstractRenderer
     {
         if (!$content) {
             return '';
+        }
+
+        if ($this->format == self::DISPLAY_DURATION_FROMSECONDS) {
+
+            $date = new DateTimeObject();
+            $date->addSeconds($content);
+            return $date->display(DateTimeObject::DISPLAY_DURATION);
         }
 
         if (is_string($content)) {
