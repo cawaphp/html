@@ -76,7 +76,7 @@ class Select extends AbstractField implements MultipleValueInterface
 
         /** @var HtmlElement $element */
         foreach ($this->getField()->elements as $element) {
-            if ($element->getAttribute('selected') == 'selected') {
+            if ($element instanceof HtmlElement && $element->getAttribute('selected') == 'selected') {
                 $return[] = $element->getAttribute('value');
             }
         }
@@ -124,10 +124,15 @@ class Select extends AbstractField implements MultipleValueInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function render()
     {
         if ($this->isRequired() == false || $this->isMultiple() == true) {
-            $this->optionsElements['']->setRenderable(false);
+            if ($this->getValue()) {
+                $this->optionsElements['']->setRenderable(false);
+            }
         }
 
         return parent::render();
