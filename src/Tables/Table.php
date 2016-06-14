@@ -185,26 +185,34 @@ class Table extends HtmlContainer
             foreach ($this->data as $row) {
                 $tr = (new HtmlContainer('<tr>'));
 
-                /** @var Column $column */
-                foreach ($this->thead->elements as $column) {
-                    if ($column->isVisible() && $column->isRenderable()) {
-                        $td = (new HtmlElement('<td>'));
-                        $td->addClass($column->getClasses());
-                        $content = $row[$column->getId()] ?? '';
+                if (sizeof($this->thead->elements)) {
+                    /** @var Column $column */
+                    foreach ($this->thead->elements as $column) {
+                        if ($column->isVisible() && $column->isRenderable()) {
+                            $td = (new HtmlElement('<td>'));
+                            $td->addClass($column->getClasses());
+                            $content = $row[$column->getId()] ?? '';
 
-                        if ($column->getRenderer()) {
-                            foreach ($column->getRenderer() as $renderer) {
-                                $content = $renderer($content, $column, $this->getPrimaryValues($row), $row);
+                            if ($column->getRenderer()) {
+                                foreach ($column->getRenderer() as $renderer) {
+                                    $content = $renderer($content, $column, $this->getPrimaryValues($row), $row);
+                                }
                             }
-                        }
 
-                        $td->setContent((string) $content);
-                        $tr->add($td);
+                            $td->setContent((string)$content);
+                            $tr->add($td);
+                        }
+                    }
+                } else {
+                    foreach ($row as $col) {
+                        $tr->add(new HtmlElement('<td>', $col));
                     }
                 }
 
-                foreach ($this->renderCallback as $callback) {
-                    $tr = call_user_func($callback, $tr, $row);
+                if ($this->renderCallback) {
+                    foreach ($this->renderCallback as $callback) {
+                        $tr = call_user_func($callback, $tr, $row);
+                    }
                 }
 
                 $this->tbody->add($tr);
