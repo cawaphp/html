@@ -199,7 +199,7 @@ class Table extends HtmlContainer
                                 }
                             }
 
-                            $td->setContent((string)$content);
+                            $td->setContent((string) $content);
                             $tr->add($td);
                         }
                     }

@@ -129,7 +129,7 @@ class Select extends AbstractField implements MultipleValueInterface
      */
     public function render()
     {
-        if ($this->isRequired() == false || $this->isMultiple() == true) {
+        if ($this->isRequired() == true || $this->isMultiple() == true) {
             if ($this->getValue()) {
                 $this->optionsElements['']->setRenderable(false);
             }
