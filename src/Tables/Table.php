@@ -221,7 +221,7 @@ class Table extends HtmlContainer
             $this->tbody->add((new HtmlContainer('<tr>'))
                 ->add((new HtmlElement('<td>'))
                     ->addAttribute('colspan', (string) sizeof($this->getVisibleColumns()))
-                    ->setContent($this->translator()->trans('html.table/noResult'))
+                    ->setContent($this->trans('html.table/noResult'))
                     ->addClass('text-center')));
         }
 
