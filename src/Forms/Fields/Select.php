@@ -125,7 +125,7 @@ class Select extends AbstractField implements MultipleValueInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function layout() : Container
     {
@@ -134,6 +134,7 @@ class Select extends AbstractField implements MultipleValueInterface
                 ->add(...array_values($this->optionsElements))
                 ->render()
         );
+
         return parent::layout();
     }
 

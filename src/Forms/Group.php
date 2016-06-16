@@ -131,11 +131,12 @@ class Group extends HtmlContainer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function render()
     {
         $this->content = $this->layout()->render();
+
         return parent::render();
     }
 }

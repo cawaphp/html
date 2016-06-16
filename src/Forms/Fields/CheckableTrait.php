@@ -14,8 +14,6 @@ declare (strict_types=1);
 namespace Cawa\Html\Forms\Fields;
 
 use Cawa\Renderer\Container;
-use Cawa\Renderer\EmptyElement;
-use Cawa\Renderer\HtmlContainer;
 
 /**
  * @mixin AbstractField
@@ -90,7 +88,7 @@ trait CheckableTrait
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function layout() : Container
     {
