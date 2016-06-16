@@ -14,10 +14,11 @@ declare (strict_types = 1);
 namespace Cawa\Html\Forms\Fields;
 
 use Cawa\Html\Forms\Label;
+use Cawa\Renderer\Container;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Renderer\HtmlElement;
 
-abstract class AbstractField extends HtmlContainer
+abstract class AbstractField extends HtmlElement
 {
     /**
      * @param string $tag
@@ -32,8 +33,6 @@ abstract class AbstractField extends HtmlContainer
         if ($name) {
             $this->setName($name);
         }
-
-        $this->add($this->field);
 
         if ($label) {
             $this->setLabel($label);
@@ -60,8 +59,6 @@ abstract class AbstractField extends HtmlContainer
      */
     public function setLabel($label) : self
     {
-        $index = $this->getIndex($this->label);
-
         if (!$label instanceof Label && !$label instanceof HtmlElement) {
             $label = new Label($label);
         }
@@ -74,12 +71,6 @@ abstract class AbstractField extends HtmlContainer
 
         if (!$this->getPlaceholder() && $this->label->getContent()) {
             $this->setPlaceholder($this->label->getContent());
-        }
-
-        if (is_null($index)) {
-            $this->addFirst($label);
-        } else {
-            $this->elements[$index] = $label;
         }
 
         return $this;
@@ -96,25 +87,6 @@ abstract class AbstractField extends HtmlContainer
     public function getField() : HtmlContainer
     {
         return $this->field;
-    }
-
-    /**
-     * @param HtmlContainer|null $field
-     *
-     * @return $this
-     */
-    protected function setField($field = null) : self
-    {
-        $index = $this->getIndex($this->field);
-
-        if (is_null($index)) {
-            throw new \LogicException("Can't find field");
-        }
-
-        $this->elements[$index] = $field;
-        $this->field = $field;
-
-        return $this;
     }
 
     /**
@@ -324,5 +296,29 @@ abstract class AbstractField extends HtmlContainer
         }
 
         return $this;
+    }
+
+    /**
+     * @return Container
+     */
+    protected function layout() : Container
+    {
+        $container = new Container();
+        if ($this->label) {
+            $container->add($this->label);
+        }
+
+        $container->add($this->field);
+
+        return $container;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function render()
+    {
+        $this->content = $this->layout()->render();
+        return parent::render();
     }
 }

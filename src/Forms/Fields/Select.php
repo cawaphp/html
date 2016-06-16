@@ -15,6 +15,7 @@ namespace Cawa\Html\Forms\Fields;
 
 use Cawa\Html\Forms\FieldsProperties\MultipleTrait;
 use Cawa\Html\Forms\FieldsProperties\MultipleValueInterface;
+use Cawa\Renderer\Container;
 use Cawa\Renderer\HtmlElement;
 
 class Select extends AbstractField implements MultipleValueInterface
@@ -44,7 +45,7 @@ class Select extends AbstractField implements MultipleValueInterface
         $this->addOption('', '&nbsp;');
 
         foreach ($options as $key => $value) {
-            $this->addOption((string) $key, $isAssociative ? (string) $value : (string) $key);
+            $this->addOption($isAssociative ? (string) $key : (string) $value, $value);
         }
     }
 
@@ -59,7 +60,6 @@ class Select extends AbstractField implements MultipleValueInterface
         $option = new HtmlElement('<option>');
         $option->setContent((string) $value);
         $option->addAttribute('value', $key);
-        $this->getField()->add($option);
 
         $this->options[$key] = $value;
         $this->optionsElements[$key] = $option;
@@ -75,8 +75,8 @@ class Select extends AbstractField implements MultipleValueInterface
         $return = [];
 
         /** @var HtmlElement $element */
-        foreach ($this->getField()->elements as $element) {
-            if ($element instanceof HtmlElement && $element->getAttribute('selected') == 'selected') {
+        foreach ($this->optionsElements as $element) {
+            if ($element->getAttribute('selected') == 'selected') {
                 $return[] = $element->getAttribute('value');
             }
         }
@@ -112,7 +112,7 @@ class Select extends AbstractField implements MultipleValueInterface
             }
 
             /** @var HtmlElement $element */
-            foreach ($this->getField()->elements as $element) {
+            foreach ($this->optionsElements as $element) {
                 if ($element->getAttribute('value') == $currentValue) {
                     $element->addAttribute('selected', 'selected');
                 } elseif (!$isArray) {
@@ -122,6 +122,19 @@ class Select extends AbstractField implements MultipleValueInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function layout() : Container
+    {
+        $this->getField()->setContent(
+            (new Container())
+                ->add(...array_values($this->optionsElements))
+                ->render()
+        );
+        return parent::layout();
     }
 
     /**

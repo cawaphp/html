@@ -14,6 +14,7 @@ declare (strict_types=1);
 namespace Cawa\Html\Forms;
 
 use Cawa\Controller\ViewController;
+use Cawa\Renderer\Container;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Renderer\HtmlElement;
 
@@ -38,6 +39,14 @@ class Group extends HtmlContainer
      * @var HtmlContainer
      */
     protected $container;
+
+    /**
+     * @return HtmlContainer
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
 
     /**
      * {@inheritdoc}
@@ -107,29 +116,26 @@ class Group extends HtmlContainer
     }
 
     /**
-     * @return HtmlContainer
+     * @return Container
      */
-    public function getField()
+    protected function layout() : Container
     {
-        return $this->container;
+        $container = new Container();
+        if ($this->label) {
+            $container->add($this->label);
+        }
+
+        $container->add($this->container);
+
+        return $container;
     }
 
     /**
-     * @param HtmlContainer|null $field
-     *
-     * @return $this
+     * @inheritdoc
      */
-    protected function setField($field = null) : self
+    public function render()
     {
-        $index = $this->getIndex($this->container);
-        $this->container = $field;
-
-        if (is_null($index)) {
-            array_unshift($this->elements, $field);
-        } else {
-            $this->elements[$index] = $field;
-        }
-
-        return $this;
+        $this->content = $this->layout()->render();
+        return parent::render();
     }
 }

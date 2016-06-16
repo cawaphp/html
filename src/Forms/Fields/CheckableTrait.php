@@ -13,6 +13,7 @@ declare (strict_types=1);
 
 namespace Cawa\Html\Forms\Fields;
 
+use Cawa\Renderer\Container;
 use Cawa\Renderer\EmptyElement;
 use Cawa\Renderer\HtmlContainer;
 
@@ -89,20 +90,16 @@ trait CheckableTrait
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
-    protected function renderCheckable()
+    protected function layout() : Container
     {
-        $labelContent = $this->getLabel()->getContent();
-        $field = $this->getField();
-
         if (!is_null($this->submitValue)) {
-            $field->addAttribute('value', $this->submitValue);
+            $this->getField()->addAttribute('value', $this->submitValue);
         }
 
-        $this->getLabel()->setContent($this->getField()->render() . ' ' . $labelContent);
-        $this->setField(new EmptyElement());
+        $this->getLabel()->setContent($this->getField()->render() . ' ' . $this->getLabel()->getContent());
 
-        return HtmlContainer::render();
+        return (new Container())->add($this->getLabel());
     }
 }

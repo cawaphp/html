@@ -29,12 +29,4 @@ class Checkbox extends AbstractField
 
         $this->setSubmitValue($submitValue ?: '1');
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function render()
-    {
-        return $this->renderCheckable();
-    }
 }

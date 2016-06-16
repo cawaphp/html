@@ -32,8 +32,10 @@ class Duration extends AbstractRenderer
 
         if (is_string($content)) {
             $content = new Time($content);
+        } elseif (is_int($content)) {
+            $content = Time::createFromTime(0, 0, 0)->addSeconds($content);
         }
 
-        return $content->display();
+        return $content->display(Time::DISPLAY_DURATION);
     }
 }

@@ -33,12 +33,4 @@ class Radio extends AbstractField
 
         $this->setSubmitValue($submitValue);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function render()
-    {
-        return $this->renderCheckable();
-    }
 }
