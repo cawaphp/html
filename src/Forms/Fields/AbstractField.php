@@ -313,6 +313,17 @@ abstract class AbstractField extends HtmlElement
         return $container;
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function renderOuter() : array
+    {
+        $this->content = $this->layout()->render();
+
+        return parent::renderOuter();
+    }
+
     /**
      * {@inheritdoc}
      */

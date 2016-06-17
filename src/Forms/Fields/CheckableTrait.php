@@ -96,8 +96,9 @@ trait CheckableTrait
             $this->getField()->addAttribute('value', $this->submitValue);
         }
 
-        $this->getLabel()->setContent($this->getField()->render() . ' ' . $this->getLabel()->getContent());
+        $label = clone $this->getLabel();
+        $label->setContent($this->getField()->render() . ' ' . $label->getContent());
 
-        return (new Container())->add($this->getLabel());
+        return (new Container())->add($label);
     }
 }

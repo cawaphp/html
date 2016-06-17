@@ -223,16 +223,12 @@ class Form extends HtmlContainer
     private $arrayNameIndex = [];
 
     /**
-     * @param AbstractField|Group|Fieldset $field
+     * @param Group|Fieldset|AbstractField $field
      *
-     * @return bool
+     * @return array|Fields\AbstractField[]
      */
-    protected function populateValue($field) : bool
+    private function getFields($field)
     {
-        if (!$this->isSubmit()) {
-            return false;
-        }
-
         if ($field instanceof Group || $field instanceof Fieldset) {
             $elements = $field->getFields();
         } elseif ($field instanceof AbstractField) {
@@ -243,6 +239,22 @@ class Form extends HtmlContainer
                 is_object($field) ? get_class($field) : gettype($field)
             ));
         }
+
+        return $elements;
+    }
+
+    /**
+     * @param AbstractField|Group|Fieldset $field
+     *
+     * @return bool
+     */
+    protected function populateValue($field) : bool
+    {
+        if (!$this->isSubmit()) {
+            return false;
+        }
+
+        $elements = $this->getFields($field);
 
         $return = true;
 
@@ -433,29 +445,28 @@ class Form extends HtmlContainer
             'elements' => [],
         ];
 
-        /** @var AbstractField $element */
-        foreach ($this->elements as $element) {
-            if (!$element->getName()) {
-                throw new \InvalidArgumentException(sprintf(
-                    "Can't export fields '%s' without name",
-                    get_class($element)
-                ));
+        /** @var Group|Fieldset|AbstractField $element */
+        foreach ($this->elements as $field) {
+            $elements = $this->getFields($field);
+
+            foreach ($elements as $element) {
+                if (!$element->getName()) {
+                    throw new \InvalidArgumentException(sprintf(
+                        "Can't export fields '%s' without name",
+                        get_class($element)
+                    ));
+                }
+
+                $item = [
+                    'name' => $element->getName(),
+                    'render' => $element->render(),
+                    'value' => $element->getValue(),
+                    'field' => $element->getField()->render(),
+                    'label' => $element->getLabel() ? $element->getLabel()->render() : null,
+                ];
+
+                $return['elements'][$element->getName()] = $item;
             }
-
-            $item = [
-                'name' => $element->getName(),
-                'outer' => $element->renderOuter(),
-                'value' => $element->getValue(),
-            ];
-
-            $item['field'] = $element->getField()->render();
-            if ($element->getLabel()) {
-                $item['label'] = $element->getLabel()->render();
-                $item['labelOuter'] = $element->getLabel()->renderOuter();
-                $item['labelContent'] = $element->getLabel()->getContent();
-            }
-
-            $return['elements'][$element->getName()] = $item;
         }
 
         return $return;
