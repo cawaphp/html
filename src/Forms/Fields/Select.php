@@ -30,7 +30,7 @@ class Select extends AbstractField implements MultipleValueInterface
     /**
      * @var HtmlElement[]
      */
-    private $optionsElements = [];
+    protected $optionsElements = [];
 
     /**
      * @param string $name
