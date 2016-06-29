@@ -445,7 +445,7 @@ class Form extends HtmlContainer
             'elements' => [],
         ];
 
-        /** @var Group|Fieldset|AbstractField $element */
+        /* @var Group|Fieldset|AbstractField $element */
         foreach ($this->elements as $field) {
             $elements = $this->getFields($field);
 
