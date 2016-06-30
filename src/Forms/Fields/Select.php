@@ -93,9 +93,12 @@ class Select extends AbstractField implements MultipleValueInterface
      */
     public function setValue($value) : parent
     {
-        $isArray = is_array($value);
         if (!is_array($value)) {
             $value = [$value];
+        }
+
+        foreach ($this->optionsElements as $element) {
+            $element->removeAttribute('selected');
         }
 
         foreach ($value as $currentValue) {
@@ -115,8 +118,6 @@ class Select extends AbstractField implements MultipleValueInterface
             foreach ($this->optionsElements as $element) {
                 if ($element->getAttribute('value') == $currentValue) {
                     $element->addAttribute('selected', 'selected');
-                } elseif (!$isArray) {
-                    $element->removeAttribute('selected');
                 }
             }
         }

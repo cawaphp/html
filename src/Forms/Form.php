@@ -501,30 +501,20 @@ class Form extends HtmlContainer
             $this->addCsrf();
         }
 
-        // append all querystring && input hidden for submit
+        // remove all questring of current form
         if ($this->getMethod() == 'GET') {
             $this->add(new Hidden($this->getName(), '1'));
 
-            /*
             $uri = new Uri($this->getAction());
             if ($uri->getQueries()) {
+                $remove = [];
                 foreach ($uri->getQueries() as $key => $value) {
                     if (isset($this->values[$key]) || isset($this->values[$key . '[]'])) {
-                        continue;
+                        $remove[] = $key;
                     }
-
-                    if (!is_array($value)) {
-                        $this->add(new Hidden($key, $value));
-                    } else {
-                        foreach ($value as $current) {
-                            $this->add(new Hidden($key . '[]', $current));
-                        }
-                    }
-
-                    $this->setAction($uri->removeAllQueries()->get());
                 }
+                $this->setAction((string) $uri->removeQueries($remove));
             }
-            */
         }
     }
 }
