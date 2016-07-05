@@ -35,6 +35,12 @@ trait MultipleTrait
      */
     public function setMultiple(bool $multiple = true)
     {
+        if ($multiple && $this->getPrimitiveType() && substr($this->getPrimitiveType(), -2) != '[]') {
+            $this->setValidation($this->getPrimitiveType() . '[]');
+        } else if (!$multiple && $this->getPrimitiveType() && substr($this->getPrimitiveType(), -2) == '[]') {
+            $this->setValidation(substr($this->getPrimitiveType(), 0, -2));
+        }
+
         if ($multiple) {
             $this->getField()->addAttribute('multiple', 'multiple');
         } else {
