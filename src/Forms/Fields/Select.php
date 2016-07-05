@@ -33,6 +33,11 @@ class Select extends AbstractField implements MultipleValueInterface
     protected $optionsElements = [];
 
     /**
+     * @var bool
+     */
+    protected $checkValue = true;
+
+    /**
      * @param string $name
      * @param string $label
      * @param array $options
@@ -106,12 +111,14 @@ class Select extends AbstractField implements MultipleValueInterface
                 continue;
             }
 
-            if (!in_array($currentValue, array_keys($this->options))) {
-                throw new \InvalidArgumentException(sprintf(
-                    "Invalid option value '%s' for select '%s'",
-                    $currentValue,
-                    $this->getName()
-                ));
+            if ($this->checkValue) {
+                if (!in_array($currentValue, array_keys($this->options))) {
+                    throw new \InvalidArgumentException(sprintf(
+                        "Invalid option value '%s' for select '%s'",
+                        $currentValue,
+                        $this->getName()
+                    ));
+                }
             }
 
             /** @var HtmlElement $element */
