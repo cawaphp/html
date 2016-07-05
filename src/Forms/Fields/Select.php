@@ -16,6 +16,7 @@ namespace Cawa\Html\Forms\Fields;
 use Cawa\Html\Forms\FieldsProperties\MultipleTrait;
 use Cawa\Html\Forms\FieldsProperties\MultipleValueInterface;
 use Cawa\Renderer\Container;
+use Cawa\Renderer\HtmlContainer;
 use Cawa\Renderer\HtmlElement;
 
 class Select extends AbstractField implements MultipleValueInterface
@@ -31,6 +32,11 @@ class Select extends AbstractField implements MultipleValueInterface
      * @var HtmlElement[]
      */
     protected $optionsElements = [];
+
+    /**
+     * @var HtmlElement[]
+     */
+    protected $allOptions = [];
 
     /**
      * @var bool
@@ -56,20 +62,37 @@ class Select extends AbstractField implements MultipleValueInterface
 
     /**
      * @param string $key
-     * @param string $value
+     * @param string|array $value
+     * @param bool $autoAppend
      *
-     * @return $this
+     * @return HtmlElement
      */
-    protected function addOption(string $key, string $value) : self
+    protected function addOption(string $key, $value, bool $autoAppend = true) : HtmlElement
     {
-        $option = new HtmlElement('<option>');
-        $option->setContent((string) $value);
-        $option->addAttribute('value', $key);
+        if (is_array($value)) {
 
-        $this->options[$key] = $value;
-        $this->optionsElements[$key] = $option;
+            $group = (new HtmlContainer('<optgroup>'))
+                ->addAttribute('label', $key);
 
-        return $this;
+            $this->allOptions['group-' . $key] = $group;
+
+            foreach ($value as $currentKey => $currentValue) {
+                $group->add($this->addOption((string) $currentKey, $currentValue, false));
+            }
+            return $group;
+        } else {
+            $option = new HtmlElement('<option>');
+            $option->setContent((string) $value);
+            $option->addAttribute('value', $key);
+
+            $this->options[$key] = $value;
+            $this->optionsElements[$key] = $option;
+
+            if ($autoAppend) {
+                $this->allOptions[$key] = $option;
+            }
+            return $option;
+        }
     }
 
     /**
@@ -139,7 +162,7 @@ class Select extends AbstractField implements MultipleValueInterface
     {
         $this->getField()->setContent(
             (new Container())
-                ->add(...array_values($this->optionsElements))
+                ->add(...array_values($this->allOptions))
                 ->render()
         );
 
