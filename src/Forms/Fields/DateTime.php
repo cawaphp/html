@@ -34,10 +34,10 @@ class DateTime extends AbstractField
     public function setValue($value) : parent
     {
         if ($value instanceof DateObject || $value instanceof DateTimeObject) {
-            $value = $value->formatTz('Y-m-d\TH:i:s');
+            $value = $value->format('Y-m-d\TH:i:s');
         } elseif (is_string($value) && $value) {
-            $date = new DateTimeObject($value, DateTimeObject::getUserTimezone());
-            $value = $date->formatTz('Y-m-d\TH:i:s');
+            $date = new DateTimeObject($value);
+            $value = $date->format('Y-m-d\TH:i:s');
         }
 
         return parent::setValue($value);
