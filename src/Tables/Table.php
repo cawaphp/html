@@ -202,7 +202,6 @@ class Table extends HtmlContainer
     public function render()
     {
         if (sizeof($this->data)) {
-
             // append row actions
             foreach ($this->rowActions as $i => $rowAction) {
                 $this->add(

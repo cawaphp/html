@@ -70,7 +70,6 @@ class Select extends AbstractField implements MultipleValueInterface
     protected function addOption(string $key, $value, bool $autoAppend = true) : HtmlElement
     {
         if (is_array($value)) {
-
             $group = (new HtmlContainer('<optgroup>'))
                 ->addAttribute('label', $key);
 
@@ -79,6 +78,7 @@ class Select extends AbstractField implements MultipleValueInterface
             foreach ($value as $currentKey => $currentValue) {
                 $group->add($this->addOption((string) $currentKey, $currentValue, false));
             }
+
             return $group;
         } else {
             $option = new HtmlElement('<option>');
@@ -91,6 +91,7 @@ class Select extends AbstractField implements MultipleValueInterface
             if ($autoAppend) {
                 $this->allOptions[$key] = $option;
             }
+
             return $option;
         }
     }

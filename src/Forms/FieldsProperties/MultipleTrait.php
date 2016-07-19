@@ -37,7 +37,7 @@ trait MultipleTrait
     {
         if ($multiple && $this->getPrimitiveType() && substr($this->getPrimitiveType(), -2) != '[]') {
             $this->setValidation($this->getPrimitiveType() . '[]');
-        } else if (!$multiple && $this->getPrimitiveType() && substr($this->getPrimitiveType(), -2) == '[]') {
+        } elseif (!$multiple && $this->getPrimitiveType() && substr($this->getPrimitiveType(), -2) == '[]') {
             $this->setValidation(substr($this->getPrimitiveType(), 0, -2));
         }
 
