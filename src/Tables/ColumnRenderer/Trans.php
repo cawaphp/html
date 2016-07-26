@@ -38,6 +38,6 @@ class Trans extends AbstractRenderer
      */
     public function __invoke($content, Column $column, array $primaryValues, array $data) : string
     {
-        return $this->trans($this->localeKeys . '/' . $content);
+        return self::trans($this->localeKeys . '/' . $content);
     }
 }

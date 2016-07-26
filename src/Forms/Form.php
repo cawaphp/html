@@ -295,9 +295,9 @@ class Form extends HtmlContainer
         */
 
         if ($element instanceof File) {
-            $userInput = $this->request()->getUploadedFile($name);
+            $userInput = self::request()->getUploadedFile($name);
         } else {
-            $userInput = $this->request()->getArg($name);
+            $userInput = self::request()->getArg($name);
         }
 
         $userInput = $userInput != '' ? $userInput : null;
@@ -379,18 +379,18 @@ class Form extends HtmlContainer
             throw new \LogicException("Can't test isSubmit without form name on method GET");
         }
 
-        if ($this->request()->getMethod() != $this->getMethod()) {
+        if (self::request()->getMethod() != $this->getMethod()) {
             return false;
         }
 
-        if ($this->getMethod() == 'GET' && !$this->request()->getQuery($this->getName(), 'bool')) {
+        if ($this->getMethod() == 'GET' && !self::request()->getQuery($this->getName(), 'bool')) {
             return false;
         }
 
         if ($this->csrf) {
             $csrfName = 'CSRF_' . $this->getName();
             $csrfToken = self::session()->get($csrfName);
-            if ($this->request()->getArg('_csrf', 'string') != $csrfToken) {
+            if (self::request()->getArg('_csrf', 'string') != $csrfToken) {
                 return false;
             }
         }

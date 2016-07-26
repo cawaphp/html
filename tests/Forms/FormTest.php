@@ -39,8 +39,8 @@ class UriTest extends TestCase
      */
     public function testGetValue(array $posts, array $fields, string $getValueName)
     {
-        $this->request()->setPosts($posts);
-        $this->request()->setMethod('POST');
+        self::request()->setPosts($posts);
+        self::request()->setMethod('POST');
         $form = new Form();
         foreach ($fields as $field) {
             $form->add($field);

@@ -27,7 +27,7 @@ class Table extends HtmlContainer
      */
     public function __construct()
     {
-        $this->translator()->addFile(__DIR__ . '/../../lang/global', 'html');
+        self::translator()->addFile(__DIR__ . '/../../lang/global', 'html');
 
         parent::__construct('<table>');
         $this->thead = (new HtmlContainer('<thead>'));
@@ -275,7 +275,7 @@ class Table extends HtmlContainer
             $this->tbody->add((new HtmlContainer('<tr>'))
                 ->add((new HtmlElement('<td>'))
                     ->addAttribute('colspan', (string) sizeof($this->getVisibleColumns()))
-                    ->setContent($this->trans('html.table/noResult'))
+                    ->setContent(self::trans('html.table/noResult'))
                     ->addClass('text-center')));
         }
 
