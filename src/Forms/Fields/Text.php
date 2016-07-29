@@ -24,4 +24,25 @@ class Text extends AbstractField
         parent::__construct('<input />', $name, $label);
         $this->getField()->addAttribute('type', 'text');
     }
+
+    /**
+     * @return string
+     */
+    public function getSize()
+    {
+        return $this->getField()->getAttribute('size');
+    }
+
+    /**
+     * @param int $size
+     *
+     * @return $this
+     */
+    public function setSize(int $size) : self
+    {
+        $this->getField()->addAttribute('size', (string) $size);
+
+        return $this;
+    }
+
 }
