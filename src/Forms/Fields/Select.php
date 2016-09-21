@@ -26,7 +26,7 @@ class Select extends AbstractField implements MultipleValueInterface
     /**
      * @var array
      */
-    private $options = [];
+    protected $options = [];
 
     /**
      * @var HtmlElement[]
