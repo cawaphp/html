@@ -113,7 +113,7 @@ class Table extends HtmlContainer
     /**
      * @param RowAction $rowAction
      *
-     * @return $this
+     * @return $this|self
      */
     public function addRowAction(RowAction $rowAction) : self
     {
@@ -140,7 +140,7 @@ class Table extends HtmlContainer
     /**
      * @param array $data
      *
-     * @return $this
+     * @return $this|self
      */
     public function addData(array $data) : self
     {
@@ -152,7 +152,7 @@ class Table extends HtmlContainer
     /**
      * @param array $data
      *
-     * @return $this
+     * @return $this|self
      */
     public function setData(array $data) : self
     {
@@ -187,7 +187,7 @@ class Table extends HtmlContainer
     /**
      * @param callable $renderCallback
      *
-     * @return $this
+     * @return $this|self
      */
     public function addRenderCallback(callable $renderCallback) : self
     {

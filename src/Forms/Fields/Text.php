@@ -36,7 +36,7 @@ class Text extends AbstractField
     /**
      * @param int $size
      *
-     * @return $this
+     * @return $this|self
      */
     public function setSize(int $size) : self
     {

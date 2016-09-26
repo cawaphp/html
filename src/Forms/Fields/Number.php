@@ -37,7 +37,7 @@ class Number extends AbstractField
     /**
      * @param float $min
      *
-     * @return $this
+     * @return $this|self
      */
     public function setMin(float $min) : self
     {
@@ -57,7 +57,7 @@ class Number extends AbstractField
     /**
      * @param float $max
      *
-     * @return $this
+     * @return $this|self
      */
     public function setMax(float $max) : self
     {
@@ -77,7 +77,7 @@ class Number extends AbstractField
     /**
      * @param float $step
      *
-     * @return $this
+     * @return $this|self
      */
     public function setStep(float $step) : self
     {

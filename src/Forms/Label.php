@@ -37,7 +37,7 @@ class Label extends HtmlElement
     /**
      * @param string $for
      *
-     * @return $this
+     * @return $this|self
      */
     public function setFor(string $for) : self
     {

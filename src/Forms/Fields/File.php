@@ -44,7 +44,7 @@ class File extends AbstractField implements MultipleValueInterface
     /**
      * @param \Cawa\Http\File[] $value
      *
-     * @return File
+     * @return $this|self|parent
      */
     public function setValue($value) : parent
     {

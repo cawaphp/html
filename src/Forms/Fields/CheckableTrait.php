@@ -36,7 +36,7 @@ trait CheckableTrait
     /**
      * @param string $submitValue
      *
-     * @return $this
+     * @return $this|self
      */
     public function setSubmitValue($submitValue) : self
     {

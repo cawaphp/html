@@ -45,7 +45,7 @@ class RowAction extends Link
     /**
      * @param bool $main
      *
-     * @return $this
+     * @return $this|self
      */
     public function setMain(bool $main = true) : self
     {

@@ -32,7 +32,7 @@ trait LinkTrait
     /**
      * @param string $href
      *
-     * @return $this
+     * @return $this|self
      */
     public function setHref(string $href) : self
     {

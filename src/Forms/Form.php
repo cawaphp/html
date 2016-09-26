@@ -53,7 +53,7 @@ class Form extends HtmlContainer
     /**
      * @param mixed $name
      *
-     * @return $this
+     * @return $this|self
      */
     public function setName($name) : self
     {
@@ -75,7 +75,7 @@ class Form extends HtmlContainer
     /**
      * @param string $method
      *
-     * @return $this
+     * @return $this|self
      */
     public function setMethod(string $method) : self
     {
@@ -97,7 +97,7 @@ class Form extends HtmlContainer
     /**
      * @param string $action
      *
-     * @return $this
+     * @return $this|self
      */
     public function setAction(string $action) : self
     {
@@ -113,9 +113,9 @@ class Form extends HtmlContainer
     }
 
     /**
-     * @param bool $disabled
+     * @param bool $multipart
      *
-     * @return $this
+     * @return $this|self
      */
     public function setMultipart(bool $multipart = true)
     {
@@ -142,7 +142,7 @@ class Form extends HtmlContainer
     /**
      * @param bool $csrf
      *
-     * @return $this
+     * @return $this|self
      */
     public function setCsrf(bool $csrf) : self
     {
@@ -216,11 +216,6 @@ class Form extends HtmlContainer
 
         return parent::addFirst(...$elements);
     }
-
-    /**
-     * @var array
-     */
-    private $arrayNameIndex = [];
 
     /**
      * @param Group|Fieldset|AbstractField $field
@@ -445,7 +440,7 @@ class Form extends HtmlContainer
             'elements' => [],
         ];
 
-        /* @var Group|Fieldset|AbstractField $element */
+        /* @var Group|Fieldset|AbstractField $field */
         foreach ($this->elements as $field) {
             $elements = $this->getFields($field);
 

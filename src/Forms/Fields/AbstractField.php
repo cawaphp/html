@@ -55,7 +55,7 @@ abstract class AbstractField extends HtmlElement
     /**
      * @param Label|HtmlElement|string $label
      *
-     * @return $this
+     * @return $this|self
      */
     public function setLabel($label) : self
     {
@@ -105,7 +105,7 @@ abstract class AbstractField extends HtmlElement
     /**
      * @param string $primitiveType
      *
-     * @return $this
+     * @return $this|self
      */
     public function setValidation(string $primitiveType) : self
     {
@@ -115,7 +115,7 @@ abstract class AbstractField extends HtmlElement
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getId()
     {
@@ -147,7 +147,7 @@ abstract class AbstractField extends HtmlElement
     /**
      * @param string $name
      *
-     * @return $this
+     * @return $this|self
      */
     public function setName(string $name) : self
     {
@@ -157,7 +157,7 @@ abstract class AbstractField extends HtmlElement
     }
 
     /**
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getContent()
     {
@@ -165,9 +165,7 @@ abstract class AbstractField extends HtmlElement
     }
 
     /**
-     * @param string $content
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setContent($content) : parent
     {
@@ -187,7 +185,7 @@ abstract class AbstractField extends HtmlElement
     /**
      * @param mixed $value
      *
-     * @return $this
+     * @return $this|self
      */
     public function setValue($value) : self
     {
@@ -213,7 +211,7 @@ abstract class AbstractField extends HtmlElement
     /**
      * @param string $name
      *
-     * @return $this
+     * @return $this|self
      */
     public function setPlaceholder(string $name = null) : self
     {
@@ -237,7 +235,7 @@ abstract class AbstractField extends HtmlElement
     /**
      * @param bool $disabled
      *
-     * @return $this
+     * @return $this|self
      */
     public function setDisabled(bool $disabled = true)
     {
@@ -261,7 +259,7 @@ abstract class AbstractField extends HtmlElement
     /**
      * @param bool $readOnly
      *
-     * @return $this
+     * @return $this|self
      */
     public function setReadOnly(bool $readOnly = true)
     {
@@ -285,7 +283,7 @@ abstract class AbstractField extends HtmlElement
     /**
      * @param bool $required
      *
-     * @return $this
+     * @return $this|self
      */
     public function setRequired(bool $required = true)
     {

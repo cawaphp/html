@@ -47,7 +47,7 @@ class Column extends HtmlContainer
     /**
      * @param string $id
      *
-     * @return $this
+     * @return $this|self|parent
      */
     public function setId(string $id) : parent
     {
@@ -67,7 +67,7 @@ class Column extends HtmlContainer
     /**
      * @param string $name
      *
-     * @return $this
+     * @return $this|self
      */
     public function setName(string $name) : self
     {
@@ -90,7 +90,7 @@ class Column extends HtmlContainer
     /**
      * @param bool $primary
      *
-     * @return $this
+     * @return $this|self
      */
     public function setPrimary(bool $primary = true) : self
     {
@@ -115,7 +115,7 @@ class Column extends HtmlContainer
     /**
      * @param bool $hideable
      *
-     * @return $this
+     * @return $this|self
      */
     public function setHideable(bool $hideable = false) : self
     {
@@ -140,7 +140,7 @@ class Column extends HtmlContainer
     /**
      * @param bool $visible
      *
-     * @return $this
+     * @return $this|self
      */
     public function setVisible(bool $visible = false) : self
     {
@@ -169,7 +169,7 @@ class Column extends HtmlContainer
     /**
      * @param callable|AbstractRenderer[] $renderer
      *
-     * @return $this
+     * @return $this|self
      */
     public function addRenderer($renderer) : self
     {

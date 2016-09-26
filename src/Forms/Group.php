@@ -94,7 +94,7 @@ class Group extends HtmlContainer
     /**
      * @param Label|HtmlElement|string $label
      *
-     * @return $this
+     * @return $this|self
      */
     public function setLabel($label) : self
     {

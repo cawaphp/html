@@ -31,7 +31,7 @@ trait MultipleTrait
     /**
      * @param bool $multiple
      *
-     * @return $this
+     * @return $this|self
      */
     public function setMultiple(bool $multiple = true)
     {
