@@ -107,7 +107,7 @@ abstract class AbstractField extends HtmlElement
      *
      * @return $this|self
      */
-    public function setValidation(string $primitiveType) : self
+    public function setValidation(string $primitiveType = null) : self
     {
         $this->primitiveType = $primitiveType;
 
