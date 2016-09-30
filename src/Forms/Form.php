@@ -245,17 +245,17 @@ class Form extends HtmlContainer
      */
     protected function populateValue($field) : bool
     {
-        if (!$this->isSubmit()) {
-            return false;
-        }
-
         $elements = $this->getFields($field);
 
         $return = true;
 
         foreach ($elements as $element) {
             if ($element instanceof AbstractField) {
-                $return = !$this->getFieldValue($element) ? false : $return;
+                if (!$this->isSubmit()) {
+                    $return = !$this->getDefaultValue($element) ? false : $return;
+                } else {
+                    $return = !$this->getFieldValue($element) ? false : $return;
+                }
             } else {
                 $return = !$this->populateValue($element) ? false : $return;
             }
@@ -269,7 +269,30 @@ class Form extends HtmlContainer
      *
      * @return bool
      */
-    private function getFieldValue($element)
+    private function getDefaultValue($element)
+    {
+        if (!$name = $element->getName()) {
+            return false;
+        }
+
+        if (is_null($element->getValue())) {
+            return false;
+        }
+
+        $userInput = $element->getValue();
+
+        list($valid, $elementValue) = $this->validateValue($element, $userInput);
+        $this->storeValue($name, $valid, $userInput, $elementValue);
+
+        return true;
+    }
+
+    /**
+     * @param AbstractField|Group|Fieldset $element
+     *
+     * @return bool
+     */
+    private function getFieldValue($element) : bool
     {
         if (!$name = $element->getName()) {
             return false;
@@ -297,48 +320,78 @@ class Form extends HtmlContainer
 
         $userInput = $userInput != '' ? $userInput : null;
 
-        $value = [
-            'userInput' => $userInput,
-            'valid' => true,
-            'value' => null,
-        ];
+        list($valid, $value, $typedValue) = $this->validateValue($element, $userInput);
 
-        if ($element->isRequired() && is_null($userInput)) {
-            $value['valid'] = false;
-        }
-
-        if ($element->getPrimitiveType() && !is_null($userInput)) {
-            $typeReturn = $this->validateType($userInput, $element->getPrimitiveType());
-            if (is_null($typeReturn)) {
-                $value['valid'] = false;
-            } else {
-                $value['value'] = $typeReturn;
-            }
-        } else {
-            $value['value'] = $userInput;
-        }
-
-        if (method_exists($element, 'isValid') && $value['valid'] == true && $element->getValue()) {
-            $value['valid'] = $element->isValid();
-        }
-
-        if (!$value['valid']) {
-            unset($value['value']);
-        }
 
         // We set values with type cast value if valid, else type cast, else user input
-        $elementValue = $value['value'] ?? (isset($typeReturn) ? $typeReturn : $userInput);
+        $elementValue = $value ?? (isset($typedValue) ? $typedValue : $userInput);
 
         if (is_array($elementValue) && !$element instanceof MultipleValueInterface) {
             $elementValue = null;
         }
 
         $element->setValue($elementValue);
+        $this->storeValue($name, $valid, $userInput, $elementValue);
 
-        $this->values[$name] = $value;
+        return true;
+    }
+
+    /**
+     * @param AbstractField|Group|Fieldset $element
+     * @param mixed $userInput
+     *
+     * @return array
+     */
+    private function validateValue($element, $userInput) : array
+    {
+        $valid = true;
+        $value = null;
+        $typedValue = null;
+
+        if ($element->isRequired() && is_null($userInput)) {
+            $valid = false;
+        }
+
+        if ($element->getPrimitiveType() && !is_null($userInput)) {
+            $typedValue = $this->validateType($userInput, $element->getPrimitiveType());
+            if (is_null($typedValue)) {
+                $valid = false;
+            } else {
+                $value = $typedValue;
+            }
+        } else {
+            $value = $userInput;
+        }
+
+        if (method_exists($element, 'isValid') && $valid == true && $element->getValue()) {
+            $valid = $element->isValid();
+        }
+
+        if (!$valid) {
+            $value = null;
+        }
+
+        return [$valid, $value, $typedValue];
+    }
+
+    /**
+     * @param string $name
+     * @param bool $valid
+     * @param mixed $userInput
+     * @param mixed $value
+     *
+     * @return $this|Form
+     */
+    private function storeValue(string $name, bool $valid, $userInput = null, $value = null) : self
+    {
+        $this->values[$name] = [
+            'userInput' => $userInput,
+            'valid' => $valid,
+            'value' => $value,
+        ];
 
         // store array in friendly property
-        if (stripos($name, '[') !== false && isset($value['value']) && $value['value'] != '') {
+        if (stripos($name, '[') !== false && isset($value) && $value != '') {
             $names = explode('[', str_replace(']', '', $name));
             if ($names[sizeof($names) -1] == '') {
                 array_pop($names);
@@ -353,7 +406,7 @@ class Form extends HtmlContainer
 
                 if (is_null($key)) {
                     $leave = true;
-                    $ref = $value['value'];
+                    $ref = $value;
                 } else {
                     $ref = &$ref[$key];
                 }
@@ -362,7 +415,7 @@ class Form extends HtmlContainer
             $this->valuesAsArray = array_replace_recursive($this->valuesAsArray, $valueAsArray);
         }
 
-        return true;
+        return $this;
     }
 
     /**
@@ -398,6 +451,10 @@ class Form extends HtmlContainer
      */
     public function isValid() : bool
     {
+        if (!$this->isSubmit()) {
+            return false;
+        }
+
         if (sizeof($this->values) == 0) {
             return false;
         }
