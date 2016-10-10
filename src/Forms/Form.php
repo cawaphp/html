@@ -288,6 +288,11 @@ class Form extends HtmlContainer
     }
 
     /**
+     * @var array
+     */
+    private $arrayNameIndex = [];
+
+    /**
      * @param AbstractField|Group|Fieldset $element
      *
      * @return bool
@@ -298,8 +303,6 @@ class Form extends HtmlContainer
             return false;
         }
 
-        // index name array
-        /*
         if (substr($name, -2) == '[]' && !$element instanceof MultipleValueInterface) {
             $currentName = substr($name, 0, -2);
             if (!isset($this->arrayNameIndex[$currentName])) {
@@ -310,7 +313,6 @@ class Form extends HtmlContainer
 
             $name = $currentName . '[' . $this->arrayNameIndex[$currentName] . ']';
         }
-        */
 
         if ($element instanceof File) {
             $userInput = self::request()->getUploadedFile($name);
@@ -321,7 +323,6 @@ class Form extends HtmlContainer
         $userInput = $userInput != '' ? $userInput : null;
 
         list($valid, $value, $typedValue) = $this->validateValue($element, $userInput);
-
 
         // We set values with type cast value if valid, else type cast, else user input
         $elementValue = $value ?? (isset($typedValue) ? $typedValue : $userInput);
@@ -391,7 +392,7 @@ class Form extends HtmlContainer
         ];
 
         // store array in friendly property
-        if (stripos($name, '[') !== false && isset($value) && $value != '') {
+        if (stripos($name, '[') !== false && !is_null($value) && $value != '') {
             $names = explode('[', str_replace(']', '', $name));
             if ($names[sizeof($names) -1] == '') {
                 array_pop($names);
