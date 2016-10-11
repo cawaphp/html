@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare (strict_types=1);
+declare (strict_types = 1);
 
 namespace Cawa\Html\Forms\Fields;
 
@@ -44,5 +44,4 @@ class Text extends AbstractField
 
         return $this;
     }
-
 }

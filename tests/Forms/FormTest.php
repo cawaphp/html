@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare (strict_types=1);
+declare (strict_types = 1);
 
 /**
  * Сáша frameworks tests
@@ -24,7 +24,7 @@ use Cawa\Html\Forms\Fields\Text;
 use Cawa\Html\Forms\Form;
 use PHPUnit_Framework_TestCase as TestCase;
 
-class UriTest extends TestCase
+class FormTest extends TestCase
 {
     use HttpFactory;
 
@@ -102,7 +102,7 @@ class UriTest extends TestCase
             ],
 
             [
-                ['name' => ['text1', 'text2']],
+                ['name' => ['text1']],
                 [(new Text('name[]'))],
                 'name'
             ],
