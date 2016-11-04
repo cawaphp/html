@@ -78,9 +78,14 @@ class Select extends AbstractField implements MultipleValueInterface
 
             return $group;
         } else {
-            $option = new HtmlElement('<option>');
-            $option->setContent((string) $value);
-            $option->addAttribute('value', $key);
+            $option = (new HtmlElement('<option>'))
+                ->setContent((string) $value)
+                ->addAttribute('value', $key)
+            ;
+
+            if ($value === '') {
+                $option->addAttribute('disabled', 'disabled');
+            }
 
             $this->options[$key] = $value;
             $this->optionsElements[$key] = $option;
