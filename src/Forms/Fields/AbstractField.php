@@ -193,9 +193,7 @@ abstract class AbstractField extends HtmlElement
             $value = ($value == true) ? '1' : '0';
         }
 
-        if (!is_null($value)) {
-            $this->field->addAttribute('value', (string) $value);
-        }
+        $this->field->addAttribute('value', !is_null($value) ? (string) $value : '');
 
         return $this;
     }
