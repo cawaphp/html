@@ -14,6 +14,7 @@ declare (strict_types = 1);
 namespace Cawa\Html\Tables;
 
 use Cawa\Controller\ViewController;
+use Cawa\Html\Tables\ColumnRenderer\RowAction as RowActionRenderer;
 use Cawa\Intl\TranslatorFactory;
 use Cawa\Renderer\HtmlContainer;
 use Cawa\Renderer\HtmlElement;
@@ -182,16 +183,16 @@ class Table extends HtmlContainer
     /**
      * @var callable[]
      */
-    private $renderCallback;
+    private $rowRenderers;
 
     /**
-     * @param callable $renderCallback
+     * @param callable $rowRenderer
      *
      * @return $this|self
      */
-    public function addRenderCallback(callable $renderCallback) : self
+    public function addRowRenderer(callable $rowRenderer) : self
     {
-        $this->renderCallback[] = $renderCallback;
+        $this->rowRenderers[] = $rowRenderer;
 
         return $this;
     }
@@ -206,31 +207,7 @@ class Table extends HtmlContainer
             foreach ($this->rowActions as $i => $rowAction) {
                 $this->add(
                     (new Column('row_action_' . $i, ''))
-                        ->addRenderer(function ($content, Column $column, array $primaries) use ($rowAction) {
-                            foreach ($primaries as $key => $value) {
-                                if (is_null($value)) {
-                                    continue;
-                                }
-
-                                unset($primaries[$key]);
-                                $key = preg_replace_callback('/(?:[-_])(.?)/', function ($match) {
-                                    return strtoupper($match[1]);
-                                }, $key);
-                                $primaries[$key] = (string) $value;
-                            }
-
-                            if (sizeof(array_filter($primaries)) == 0) {
-                                return '';
-                            }
-
-                            if ($rowAction->getUri()) {
-                                return $rowAction->setUri($rowAction->getUri()->addQueries($primaries))
-                                    ->render();
-                            } else {
-                                return $rowAction->addAttribute('data-ids', json_encode($primaries))
-                                    ->render();
-                            }
-                        })
+                        ->addRenderer(new RowActionRenderer($rowAction))
                         ->addClass('row-action')
                         ->setHideable(false)
                 );
@@ -263,9 +240,9 @@ class Table extends HtmlContainer
                     }
                 }
 
-                if ($this->renderCallback) {
-                    foreach ($this->renderCallback as $callback) {
-                        $tr = call_user_func($callback, $tr, $row);
+                if ($this->rowRenderers) {
+                    foreach ($this->rowRenderers as $callback) {
+                        $tr = call_user_func($callback, $tr, $row, $this);
                     }
                 }
 
