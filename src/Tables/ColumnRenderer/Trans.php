@@ -26,11 +26,18 @@ class Trans extends AbstractRenderer
     private $localeKeys;
 
     /**
-     * @param string $localeKeys
+     * @var bool
      */
-    public function __construct(string $localeKeys)
+    private $warmIfMissing;
+
+    /**
+     * @param string $localeKeys
+     * @param bool $warmIfMissing
+     */
+    public function __construct(string $localeKeys, bool $warmIfMissing = true)
     {
         $this->localeKeys = $localeKeys;
+        $this->warmIfMissing = $warmIfMissing;
     }
 
     /**
@@ -38,6 +45,6 @@ class Trans extends AbstractRenderer
      */
     public function __invoke($content, Column $column, array $primaryValues, array $data) : string
     {
-        return self::trans($this->localeKeys . '/' . $content);
+        return self::trans($this->localeKeys . '/' . $content, null, $this->warmIfMissing) ?? '';
     }
 }
