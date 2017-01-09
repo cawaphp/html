@@ -25,7 +25,7 @@ trait MultipleTrait
      */
     public function isMultiple() : bool
     {
-        return $this->getField()->hasAttribute('multiple');
+        return $this->getField()->hasProp('multiple');
     }
 
     /**
@@ -42,9 +42,9 @@ trait MultipleTrait
         }
 
         if ($multiple) {
-            $this->getField()->addAttribute('multiple', 'multiple');
+            $this->getField()->addProp('multiple');
         } else {
-            $this->getField()->removeAttribute('multiple');
+            $this->getField()->removeProp('multiple');
         }
 
         return $this;

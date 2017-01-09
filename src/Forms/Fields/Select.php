@@ -84,7 +84,7 @@ class Select extends AbstractField implements MultipleValueInterface
             ;
 
             if ($value === '') {
-                $option->addAttribute('disabled', 'disabled');
+                $option->addProp('disabled');
             }
 
             $this->options[$key] = $value;
@@ -122,7 +122,7 @@ class Select extends AbstractField implements MultipleValueInterface
 
         /** @var HtmlElement $element */
         foreach ($this->optionsElements as $element) {
-            if ($element->getAttribute('selected') == 'selected') {
+            if ($element->hasProp('selected')) {
                 $return[] = $element->getAttribute('value');
             }
         }
@@ -144,7 +144,7 @@ class Select extends AbstractField implements MultipleValueInterface
         }
 
         foreach ($this->optionsElements as $element) {
-            $element->removeAttribute('selected');
+            $element->removeProp('selected');
         }
 
         foreach ($value as $currentValue) {
@@ -165,7 +165,7 @@ class Select extends AbstractField implements MultipleValueInterface
             /** @var HtmlElement $element */
             foreach ($this->optionsElements as $element) {
                 if ($element->getAttribute('value') == $currentValue) {
-                    $element->addAttribute('selected', 'selected');
+                    $element->addProp('selected');
                 }
             }
         }

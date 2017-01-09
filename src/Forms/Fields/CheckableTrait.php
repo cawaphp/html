@@ -50,7 +50,7 @@ trait CheckableTrait
      */
     public function getValue()
     {
-        if ($this->getField()->hasAttribute('checked')) {
+        if ($this->getField()->hasProp('checked')) {
             return $this->getSubmitValue();
         }
 
@@ -63,9 +63,9 @@ trait CheckableTrait
     public function setValue($value) : parent
     {
         if ($this->getSubmitValue() == $value) {
-            $this->getField()->addAttribute('checked', 'checked');
+            $this->getField()->addProp('checked');
         } else {
-            $this->getField()->removeAttribute('checked');
+            $this->getField()->removeProp('checked');
         }
 
         return $this;
@@ -79,9 +79,9 @@ trait CheckableTrait
     public function setChecked(bool $checked) : self
     {
         if ($checked) {
-            $this->getField()->addAttribute('checked', 'checked');
+            $this->getField()->addProp('checked');
         } else {
-            $this->getField()->removeAttribute('checked');
+            $this->getField()->removeProp('checked');
         }
 
         return $this;

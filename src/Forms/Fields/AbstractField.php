@@ -227,7 +227,7 @@ abstract class AbstractField extends HtmlElement
      */
     public function isDisabled() : bool
     {
-        return $this->field->hasAttribute('disabled');
+        return $this->field->hasProp('disabled');
     }
 
     /**
@@ -238,9 +238,9 @@ abstract class AbstractField extends HtmlElement
     public function setDisabled(bool $disabled = true)
     {
         if ($disabled) {
-            $this->field->addAttribute('disabled', 'disabled');
+            $this->field->addProp('disabled');
         } else {
-            $this->field->removeAttribute('disabled');
+            $this->field->removeProp('disabled');
         }
 
         return $this;
@@ -251,7 +251,7 @@ abstract class AbstractField extends HtmlElement
      */
     public function isReadOnly() : bool
     {
-        return $this->field->hasAttribute('readonly');
+        return $this->field->hasProp('readonly');
     }
 
     /**
@@ -262,9 +262,9 @@ abstract class AbstractField extends HtmlElement
     public function setReadOnly(bool $readOnly = true)
     {
         if ($readOnly) {
-            $this->field->addAttribute('readonly', 'readonly');
+            $this->field->addProp('readonly');
         } else {
-            $this->field->removeAttribute('readonly');
+            $this->field->removeProp('readonly');
         }
 
         return $this;
@@ -275,7 +275,7 @@ abstract class AbstractField extends HtmlElement
      */
     public function isRequired() : bool
     {
-        return $this->field->hasAttribute('required');
+        return $this->field->hasProp('required');
     }
 
     /**
@@ -286,9 +286,9 @@ abstract class AbstractField extends HtmlElement
     public function setRequired(bool $required = true)
     {
         if ($required) {
-            $this->field->addAttribute('required', 'required');
+            $this->field->addProp('required');
         } else {
-            $this->field->removeAttribute('required');
+            $this->field->removeProp('required');
         }
 
         return $this;
