@@ -67,7 +67,7 @@ class Fieldset extends HtmlContainer
             throw new \LogicException("can't add element on fieldset when is already add on a form");
         }
 
-        return parent::add(...$elements);
+        return parent::addFirst(...$elements);
     }
 
     /**

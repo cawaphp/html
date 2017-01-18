@@ -14,6 +14,9 @@ declare (strict_types = 1);
 namespace Cawa\Html\Tables;
 
 use Cawa\Controller\ViewController;
+use Cawa\Html\Forms\Fields\Checkbox;
+use Cawa\Html\Forms\Fields\Radio;
+use Cawa\Html\Forms\Form;
 use Cawa\Html\Tables\ColumnRenderer\RowAction as RowActionRenderer;
 use Cawa\Intl\TranslatorFactory;
 use Cawa\Renderer\HtmlContainer;
@@ -22,6 +25,13 @@ use Cawa\Renderer\HtmlElement;
 class Table extends HtmlContainer
 {
     use TranslatorFactory;
+
+    //region Constants
+
+    const SELECTION_RADIO = 'radio';
+    const SELECTION_CHECKBOX = 'checkbox';
+
+    //endregion
 
     /**
      *
@@ -125,6 +135,107 @@ class Table extends HtmlContainer
 
     //endregion
 
+    //region SelectionModel
+
+    /**
+     * @var string
+     */
+    private $selectionModel;
+
+    /**
+     * @param string $selection
+     *
+     * @return $this|Table
+     */
+    public function setSelectionModel(string $selection) : self
+    {
+        $this->selectionModel = $selection;
+
+        $this->thead->add((new HtmlElement('<th>'))
+            ->addClass('selection')
+        );
+
+        return $this;
+    }
+
+    /**
+     * @var string
+     */
+    private $selectionName;
+
+    /**
+     * @return string
+     */
+    public function getSelectionName() : string
+    {
+        return $this->selectionName;
+    }
+
+    /**
+     * @param string $selectionName
+     *
+     * @return Table
+     */
+    public function setSelectionName(string $selectionName) : Table
+    {
+        $this->selectionName = $selectionName;
+
+        return $this;
+    }
+
+    /**
+     * @var Form
+     */
+    private $selectionForm;
+
+    /**
+     * @return Form
+     */
+    public function getSelectionForm() : Form
+    {
+        return $this->selectionForm;
+    }
+
+    /**
+     * @param Form $selectionForm
+     *
+     * @return Table
+     */
+    public function setSelectionForm(Form $selectionForm) : Table
+    {
+        $this->selectionForm = $selectionForm;
+
+        return $this;
+    }
+
+    /**
+     * @var string
+     */
+    private $selectionClass;
+
+    /**
+     * @return string
+     */
+    public function getSelectionClass() : string
+    {
+        return $this->selectionClass;
+    }
+
+    /**
+     * @param string $selectionClass
+     *
+     * @return Table
+     */
+    public function setSelectionClass(string $selectionClass) : Table
+    {
+        $this->selectionClass = $selectionClass;
+
+        return $this;
+    }
+
+    //endregion
+
+
     /**
      * @var array
      */
@@ -172,7 +283,7 @@ class Table extends HtmlContainer
         $return = [];
         /** @var Column $column */
         foreach ($this->thead->elements as $column) {
-            if ($column->isPrimary()) {
+            if ($column instanceof Column && $column->isPrimary()) {
                 $return[$column->getId()] = $data[$column->getId()] ?? null;
             }
         }
@@ -217,9 +328,47 @@ class Table extends HtmlContainer
                 $tr = (new HtmlContainer('<tr>'));
 
                 if (sizeof($this->thead->elements)) {
+                    if ($this->selectionModel) {
+
+                        $primaries = $this->getPrimaryValues($row);
+                        if (sizeof($primaries) == 1) {
+                            $name = array_keys($primaries)[0];
+                            $values = (string) $primaries[$name];
+                        } else {
+                            $name = implode('.', array_keys($primaries));
+                            $values = json_encode($primaries);
+                        }
+
+                        if ($this->selectionName) {
+                            $name = $this->selectionName;
+                        }
+
+                        if ($this->selectionModel == self::SELECTION_RADIO) {
+                            $input = new Radio($name, '', $values);
+                        } else {
+                            $input = new Checkbox($name, '', $values);
+                        }
+
+                        if (isset($row['_selected'])) {
+                            $input->setChecked(true);
+
+                            if ($this->selectionClass) {
+                                $tr->addClass($this->selectionClass);
+                            }
+                        }
+
+                        if ($this->selectionForm) {
+                            $this->selectionForm->add($input);
+                        }
+
+                        $tr->add((new HtmlContainer('<td>'))
+                            ->add($input)
+                        );
+                    }
+
                     /** @var Column $column */
                     foreach ($this->thead->elements as $column) {
-                        if ($column->isVisible() && $column->isRenderable()) {
+                        if ($column instanceof Column && $column->isVisible() && $column->isRenderable()) {
                             $td = (new HtmlElement('<td>'));
                             $td->addClass($column->getClasses());
                             $content = $row[$column->getId()] ?? '';
@@ -252,7 +401,7 @@ class Table extends HtmlContainer
             $this->tbody->add((new HtmlContainer('<tr>'))
                 ->add((new HtmlElement('<td>'))
                     ->addAttribute('colspan', (string) sizeof($this->getVisibleColumns()))
-                    ->setContent(self::trans('html.table/noResult'))
+                    ->setContent(self::trans('html.list/noResult'))
                     ->addClass('text-center')));
         }
 

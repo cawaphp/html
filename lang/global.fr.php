@@ -1,6 +1,6 @@
 <?php
 return [
-    'table' => [
+    'list' => [
         'noResult' => 'Aucun Résultat',
     ],
 ];

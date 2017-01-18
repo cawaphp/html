@@ -27,4 +27,12 @@ class Plain extends AbstractField
             $this->setContent($content);
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPlaceholder(string $name = null) : parent
+    {
+        return $this;
+    }
 }
