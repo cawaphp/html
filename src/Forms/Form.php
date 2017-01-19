@@ -186,6 +186,16 @@ class Form extends HtmlContainer
     }
 
     /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasInput(string $name) : bool
+    {
+        return isset($this->values[$name]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function add(ViewController ...$elements)
