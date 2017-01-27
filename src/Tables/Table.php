@@ -235,7 +235,6 @@ class Table extends HtmlContainer
 
     //endregion
 
-
     /**
      * @var array
      */
@@ -329,7 +328,6 @@ class Table extends HtmlContainer
 
                 if (sizeof($this->thead->elements)) {
                     if ($this->selectionModel) {
-
                         $primaries = $this->getPrimaryValues($row);
                         if (sizeof($primaries) == 1) {
                             $name = array_keys($primaries)[0];

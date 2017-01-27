@@ -29,7 +29,7 @@ class Plain extends AbstractField
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setPlaceholder(string $name = null) : parent
     {

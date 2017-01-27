@@ -99,10 +99,10 @@ trait CheckableTrait
         if ($this->getLabel()) {
             $label = clone $this->getLabel();
             $label->setContent($this->getField()->render() . ' ' . $label->getContent());
+
             return (new Container())->add($label);
         } else {
             return (new Container())->add($this->getField());
         }
-
     }
 }
