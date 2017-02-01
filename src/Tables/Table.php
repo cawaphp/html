@@ -93,7 +93,7 @@ class Table extends HtmlContainer
     /**
      * @return Column[]
      */
-    public function getColums()
+    public function getColumns()
     {
         return $this->thead->elements;
     }
