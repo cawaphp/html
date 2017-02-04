@@ -313,6 +313,16 @@ class Table extends HtmlContainer
     public function render()
     {
         if (sizeof($this->data)) {
+
+            if (sizeof($this->thead->elements) == 0) {
+                $keys = array_keys($this->data[0]);
+                if (!is_numeric($keys[0])) {
+                    foreach ($keys as $column) {
+                        $this->add(new Column($column, $column));
+                    }
+                }
+            }
+
             // append row actions
             foreach ($this->rowActions as $i => $rowAction) {
                 $this->add(
