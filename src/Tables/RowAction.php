@@ -35,24 +35,24 @@ class RowAction extends Link
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isMain() : bool
+    public function getActionIndex() : ?int
     {
-        return is_null($this->getAttribute('data-main-action'));
+        return $this->getAttribute('data-action-index') ? (int) $this->getAttribute('data-action-index') : null;
     }
 
     /**
-     * @param bool $main
+     * @param int $index
      *
      * @return $this|self
      */
-    public function setMain(bool $main = true) : self
+    public function setActionIndex(int $index = null) : self
     {
-        if ($main) {
-            return $this->addAttribute('data-main-action', 'true');
+        if ($index) {
+            return $this->addAttribute('data-action-index', (string) $index);
         } else {
-            return $this->removeAttribute('data-main-action');
+            return $this->removeAttribute('data-index-action');
         }
     }
 }

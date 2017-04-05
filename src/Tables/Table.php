@@ -122,13 +122,28 @@ class Table extends HtmlContainer
     private $rowActions = [];
 
     /**
-     * @param RowAction $rowAction
-     *
-     * @return $this|self
+     * @var callable[]
      */
-    public function addRowAction(RowAction $rowAction) : self
+    private $rowActionInit = [];
+
+    /**
+     * @return RowAction[]
+     */
+    public function getRowActions() : array
+    {
+        return $this->rowActions;
+    }
+
+    /**
+     * @param RowAction $rowAction
+     * @param callable $rowActionInit
+     *
+     * @return $this|Table
+     */
+    public function addRowAction(RowAction $rowAction, callable $rowActionInit = null) : self
     {
         $this->rowActions[] = $rowAction;
+        $this->rowActionInit[] = $rowActionInit;
 
         return $this;
     }
@@ -313,7 +328,6 @@ class Table extends HtmlContainer
     public function render()
     {
         if (sizeof($this->data)) {
-
             if (sizeof($this->thead->elements) == 0) {
                 $keys = array_keys($this->data[0]);
                 if (!is_numeric($keys[0])) {
@@ -325,12 +339,15 @@ class Table extends HtmlContainer
 
             // append row actions
             foreach ($this->rowActions as $i => $rowAction) {
-                $this->add(
-                    (new Column('row_action_' . $i, ''))
-                        ->addRenderer(new RowActionRenderer($rowAction))
-                        ->addClass('row-action')
-                        ->setHideable(false)
-                );
+                $rowActionColumn = (new Column('row_action_' . $i, ''))
+                    ->addRenderer(new RowActionRenderer($rowAction))
+                    ->addClass('row-action')
+                    ->setHideable(false);
+
+                if (is_callable($this->rowActionInit[$i])) {
+                    $rowActionColumn = $this->rowActionInit[$i]($rowActionColumn);
+                }
+                $this->add($rowActionColumn);
             }
 
             foreach ($this->data as $row) {

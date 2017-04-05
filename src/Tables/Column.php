@@ -167,13 +167,24 @@ class Column extends HtmlContainer
     }
 
     /**
-     * @param callable|AbstractRenderer[] $renderer
+     * @param callable|AbstractRenderer $renderer
      *
      * @return $this|self
      */
     public function addRenderer($renderer) : self
     {
         $this->renderer[] = $renderer;
+
+        return $this;
+    }
+    /**
+     * @param callable[]|AbstractRenderer[] $renderer
+     *
+     * @return $this|self
+     */
+    public function setRenderer(array $renderer) : self
+    {
+        $this->renderer = $renderer;
 
         return $this;
     }
