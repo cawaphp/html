@@ -309,7 +309,7 @@ class Form extends HtmlContainer
      */
     private function getFieldValue($element) : bool
     {
-        if (!$name = $element->getName()) {
+        if (!($name = $element->getName())) {
             return false;
         }
 

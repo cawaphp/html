@@ -83,7 +83,7 @@ class Select extends AbstractField implements MultipleValueInterface
                 ->addAttribute('value', $key)
             ;
 
-            if ($value === '') {
+            if ($key === '' && $value !== '&nbsp;') {
                 $option->addProp('disabled');
             }
 
@@ -195,6 +195,10 @@ class Select extends AbstractField implements MultipleValueInterface
         if ($this->isRequired() == true || $this->isMultiple() == true) {
             if (!is_null($this->getValue())) {
                 $this->optionsElements['']->setRenderable(false);
+            }
+        } elseif (isset($this->optionsElements['']) && $this->getPlaceholder()) {
+            if (!$this->getLabel() || ($this->getLabel()->getContent() != $this->getPlaceholder())) {
+                $this->optionsElements['']->setContent($this->getPlaceholder());
             }
         }
 
