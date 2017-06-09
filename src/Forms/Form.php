@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 namespace Cawa\Html\Forms;
 
@@ -180,6 +180,30 @@ class Form extends HtmlContainer
 
         if ($return === '') {
             $return = null;
+        }
+
+        return $return;
+    }
+
+    /**
+     * @return array
+     */
+    public function getValues() : array
+    {
+        $return = [];
+        foreach (array_merge(array_keys($this->valuesAsArray), array_keys($this->values)) as $key) {
+            $found = false;
+            foreach (array_keys($this->valuesAsArray) as $arrayKey) {
+                if (strpos($key, $arrayKey . '[') === 0) {
+                    $found = true;
+                }
+            }
+
+            if ($found) {
+                continue;
+            }
+
+            $return[$key] = $this->getValue($key);
         }
 
         return $return;
@@ -404,7 +428,7 @@ class Form extends HtmlContainer
         // store array in friendly property
         if (stripos($name, '[') !== false && !is_null($value) && $value != '') {
             $names = explode('[', str_replace(']', '', $name));
-            if ($names[sizeof($names) -1] == '') {
+            if ($names[sizeof($names) - 1] == '') {
                 array_pop($names);
             }
 
@@ -480,7 +504,7 @@ class Form extends HtmlContainer
     }
 
     /**
-     * add Csrf input hidden
+     * add Csrf input hidden.
      */
     private function addCsrf()
     {

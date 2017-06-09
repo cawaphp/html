@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 namespace Cawa\Html\Forms;
 
@@ -77,7 +77,7 @@ class Fieldset extends HtmlContainer
     {
         $return = [];
         foreach ($this->elements as $element) {
-            if ($element instanceof AbstractField || $element instanceof Group || $element instanceof Fieldset) {
+            if ($element instanceof AbstractField || $element instanceof Group || $element instanceof self) {
                 $return[] = $element;
             }
         }

@@ -9,13 +9,14 @@
  * file that was distributed with this source code.
  */
 
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 /**
- * Сáша frameworks tests
+ * Сáша frameworks tests.
  *
  * @author tchiotludo <http://github.com/tchiotludo>
  */
+
 namespace CawaTest\Html\Form;
 
 use Cawa\App\HttpFactory;
@@ -29,7 +30,7 @@ class FormTest extends TestCase
     use HttpFactory;
 
     /**
-     * Test that parsing and composing a valid URI returns the same URI
+     * Test that parsing and composing a valid URI returns the same URI.
      *
      * @param array $posts
      * @param AbstractField[] $fields
@@ -58,19 +59,19 @@ class FormTest extends TestCase
             [
                 ['name' => 'text'],
                 [(new Text('name'))],
-                'name'
+                'name',
             ],
 
             [
                 ['name' => ''],
                 [(new Text('name'))],
-                'name'
+                'name',
             ],
 
             [
                 ['name' => ['text']],
                 [(new Text('name[]'))],
-                'name'
+                'name',
             ],
 
             [
@@ -90,13 +91,13 @@ class FormTest extends TestCase
             ],
 
             [
-                ['name' => ['text1','text2']],
+                ['name' => ['text1', 'text2']],
                 [new Text('name[]'), new Text('name[]')],
                 'name',
             ],
 
             [
-                ['name' => ['key' => ['text1','text2']]],
+                ['name' => ['key' => ['text1', 'text2']]],
                 [new Text('name[key][]'), new Text('name[key][]')],
                 'name',
             ],
@@ -104,7 +105,7 @@ class FormTest extends TestCase
             [
                 ['name' => ['text1']],
                 [(new Text('name[]'))],
-                'name'
+                'name',
             ],
         ];
     }
