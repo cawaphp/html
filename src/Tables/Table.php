@@ -292,7 +292,7 @@ class Table extends HtmlContainer
      *
      * @return array
      */
-    private function getPrimaryValues(array $data) : array
+    public function getPrimaryValues(array $data) : array
     {
         $return = [];
         /** @var Column $column */

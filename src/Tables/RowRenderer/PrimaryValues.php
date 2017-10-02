@@ -7,8 +7,21 @@ namespace Cawa\Html\Tables\RowRenderer;
 use Cawa\Html\Tables\Table;
 use Cawa\Renderer\HtmlContainer;
 
-class RowHeader
+class PrimaryValues
 {
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @param string $name
+     */
+    public function __construct($name = 'data-primaries')
+    {
+        $this->name = $name;
+    }
+
     /**
      * @param HtmlContainer $tr
      * @param array $data
@@ -18,9 +31,8 @@ class RowHeader
      */
     public function __invoke(HtmlContainer $tr, array $data, Table $table) : HtmlContainer
     {
-        if (isset($data['_rowheader']) && $data['_rowheader']) {
-            $tr->addClass('rowheader');
-        }
+        $primaries = $table->getPrimaryValues($data);
+        $tr->addAttribute($this->name, json_encode($primaries));
 
         return $tr;
     }

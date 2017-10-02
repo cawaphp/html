@@ -10,7 +10,13 @@ use Cawa\Renderer\HtmlElement;
 
 class Deleted
 {
-    public function __invoke(HtmlContainer $tr, array $data)
+    /**
+     * @param HtmlContainer $tr
+     * @param array $data
+     *
+     * @return HtmlContainer
+     */
+    public function __invoke(HtmlContainer $tr, array $data) : HtmlContainer
     {
         if (isset($data['_deleted']) && $data['_deleted']) {
             $tr->addClass('deleted');

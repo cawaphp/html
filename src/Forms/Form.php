@@ -398,6 +398,10 @@ class Form extends HtmlContainer
             $value = $userInput;
         }
 
+        if (method_exists($element, 'transformValue') && $value) {
+            $value = $element->transformValue($value);
+        }
+
         if (method_exists($element, 'isValid') && $valid == true && $element->getValue()) {
             $valid = $element->isValid();
         }
